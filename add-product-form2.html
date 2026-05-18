@@ -1,0 +1,1095 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Add Product — Seller Dashboard</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+<style>
+/* ============================================================
+   DESIGN TOKENS
+============================================================ */
+:root {
+  --ink:          #0E1117;
+  --ink-2:        #3D4452;
+  --ink-3:        #737B8C;
+  --ink-4:        #A8AFBD;
+  --surface:      #FFFFFF;
+  --surface-2:    #F6F7F9;
+  --surface-3:    #EDEEF2;
+  --border:       #E2E4EA;
+  --border-focus: #3B7FEC;
+  --accent:       #3B7FEC;
+  --accent-light: #EBF1FD;
+  --accent-dark:  #2563C9;
+  --danger:       #E53E3E;
+  --danger-light: #FFF5F5;
+  --success:      #1A9E5C;
+  --success-light:#F0FBF6;
+  --shadow-sm:    0 2px 8px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
+  --shadow-md:    0 4px 20px rgba(0,0,0,0.08), 0 1px 4px rgba(0,0,0,0.04);
+  --r-sm:         8px;
+  --r-md:         12px;
+  --r-lg:         16px;
+  --r-xl:         20px;
+  --font:         'DM Sans', system-ui, sans-serif;
+  --font-mono:    'DM Mono', monospace;
+}
+
+/* ============================================================
+   RESET
+============================================================ */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { font-size: 16px; -webkit-text-size-adjust: 100%; }
+body {
+  font-family: var(--font);
+  background: var(--surface-2);
+  color: var(--ink);
+  min-height: 100dvh;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ============================================================
+   LAYOUT
+============================================================ */
+.page-wrapper {
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 32px 16px 64px;
+}
+.form-shell { width: 100%; max-width: 560px; }
+
+/* ============================================================
+   PAGE HEADER
+============================================================ */
+.page-header {
+  display: flex; align-items: center; gap: 14px;
+  margin-bottom: 28px;
+}
+.page-header-icon {
+  width: 40px; height: 40px;
+  border-radius: var(--r-md);
+  background: var(--accent);
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+  box-shadow: 0 4px 12px rgba(59,127,236,0.28);
+}
+.page-header-icon svg { width: 20px; height: 20px; }
+.page-header-title {
+  font-size: 20px; font-weight: 700; color: var(--ink);
+  letter-spacing: -0.4px; line-height: 1.2;
+}
+.page-header-sub { font-size: 13px; color: var(--ink-3); margin-top: 2px; }
+
+/* ============================================================
+   FORM CARD
+============================================================ */
+.form-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r-xl);
+  box-shadow: var(--shadow-md);
+  overflow: hidden;
+}
+.form-section { padding: 22px 22px 0; }
+.form-divider { height: 1px; background: var(--border); margin: 22px 0 0; }
+
+/* ============================================================
+   FIELD LABELS & ERRORS
+============================================================ */
+.field-label {
+  display: block; font-size: 13px; font-weight: 600;
+  color: var(--ink-2); margin-bottom: 8px; letter-spacing: 0.1px;
+}
+.field-label-required::after { content: " *"; color: var(--danger); font-weight: 400; }
+.field-error {
+  display: none; font-size: 12px; color: var(--danger);
+  margin-top: 5px; font-weight: 500; align-items: center; gap: 4px;
+}
+.field-error.visible { display: flex; }
+.field-error svg { flex-shrink: 0; }
+.field-wrapper.has-error .field-input,
+.field-wrapper.has-error .price-wrap { border-color: var(--danger) !important; }
+.field-wrapper.has-error .price-wrap { border-color: var(--danger); }
+
+/* ============================================================
+   TEXT INPUT
+============================================================ */
+.field-input {
+  width: 100%;
+  padding: 10px 14px;
+  border: 1.5px solid var(--border);
+  border-radius: var(--r-sm);
+  font-family: var(--font); font-size: 14px; color: var(--ink);
+  background: var(--surface); outline: none;
+  transition: border-color 0.15s, box-shadow 0.15s;
+  appearance: none; -webkit-appearance: none;
+}
+.field-input::placeholder { color: var(--ink-4); }
+.field-input:focus {
+  border-color: var(--border-focus);
+  box-shadow: 0 0 0 3px rgba(59,127,236,0.12);
+}
+
+/* ============================================================
+   PRICE INPUT
+============================================================ */
+.price-wrap {
+  display: flex; align-items: center;
+  border: 1.5px solid var(--border);
+  border-radius: var(--r-sm); overflow: hidden;
+  transition: border-color 0.15s, box-shadow 0.15s;
+  background: var(--surface);
+}
+.price-wrap:focus-within {
+  border-color: var(--border-focus);
+  box-shadow: 0 0 0 3px rgba(59,127,236,0.12);
+}
+.price-prefix {
+  padding: 10px 12px; font-size: 14px; font-weight: 600;
+  color: var(--ink-3); background: var(--surface-2);
+  border-right: 1.5px solid var(--border);
+  font-family: var(--font-mono); user-select: none; flex-shrink: 0;
+}
+.price-input {
+  flex: 1; padding: 10px 14px; border: none;
+  font-family: var(--font); font-size: 14px; color: var(--ink);
+  background: transparent; outline: none; min-width: 0;
+}
+.price-input::placeholder { color: var(--ink-4); }
+.price-input::-webkit-outer-spin-button,
+.price-input::-webkit-inner-spin-button { -webkit-appearance: none; }
+.price-input[type=number] { -moz-appearance: textfield; }
+
+/* ============================================================
+   IMAGE UPLOAD SECTION
+============================================================ */
+.upload-buttons-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-bottom: 14px;
+}
+.upload-btn {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  padding: 16px 12px;
+  border: 1.5px dashed var(--border);
+  border-radius: var(--r-md);
+  background: var(--surface);
+  cursor: pointer;
+  transition: border-color 0.15s, background 0.15s;
+  text-align: center;
+  overflow: hidden;
+}
+.upload-btn:hover { border-color: var(--accent); background: var(--accent-light); }
+.upload-btn input[type="file"] {
+  position: absolute; inset: 0; opacity: 0;
+  cursor: pointer; width: 100%; height: 100%;
+}
+.upload-btn-icon {
+  width: 36px; height: 36px; border-radius: var(--r-sm);
+  background: var(--surface-3);
+  display: flex; align-items: center; justify-content: center;
+  transition: background 0.15s;
+}
+.upload-btn:hover .upload-btn-icon { background: rgba(59,127,236,0.12); }
+.upload-btn-icon svg { width: 18px; height: 18px; color: var(--ink-3); }
+.upload-btn:hover .upload-btn-icon svg { color: var(--accent); }
+.upload-btn-label {
+  font-size: 12px; font-weight: 600; color: var(--ink-2); line-height: 1.3;
+}
+.upload-btn-sub { font-size: 11px; color: var(--ink-4); }
+
+/* Progress indicator */
+.upload-progress-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+.upload-progress-label {
+  font-size: 12px; font-weight: 600; color: var(--ink-3);
+}
+.upload-progress-label span { color: var(--ink-2); font-weight: 700; }
+.upload-progress-dots {
+  display: flex; gap: 5px;
+}
+.upload-dot {
+  width: 8px; height: 8px; border-radius: 50%;
+  border: 1.5px solid var(--border);
+  background: transparent;
+  transition: background 0.2s, border-color 0.2s;
+}
+.upload-dot.filled { background: var(--accent); border-color: var(--accent); }
+.upload-dot.main-dot { background: var(--accent); border-color: var(--accent); box-shadow: 0 0 0 2px rgba(59,127,236,0.2); }
+
+/* Image preview grid */
+.image-previews {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+}
+.preview-slot {
+  aspect-ratio: 1;
+  border-radius: var(--r-sm);
+  border: 1.5px dashed var(--border);
+  background: var(--surface-3);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  color: var(--ink-4);
+  font-size: 10px;
+  font-weight: 600;
+  position: relative;
+  overflow: hidden;
+}
+.preview-slot-num {
+  font-size: 11px; font-weight: 700; color: var(--ink-4);
+}
+.preview-slot.has-image {
+  border-style: solid; border-color: var(--border);
+  background: var(--surface-3);
+  cursor: pointer;
+}
+.preview-slot.is-main { border-color: var(--accent); box-shadow: 0 0 0 2px rgba(59,127,236,0.18); }
+.preview-slot img {
+  position: absolute; inset: 0;
+  width: 100%; height: 100%; object-fit: cover; display: block;
+}
+.preview-main-badge {
+  position: absolute; bottom: 4px; left: 0; right: 0;
+  display: flex; justify-content: center;
+  pointer-events: none;
+}
+.preview-main-badge span {
+  background: var(--accent); color: #fff;
+  font-size: 8px; font-weight: 700;
+  padding: 2px 7px; border-radius: 4px;
+  text-transform: uppercase; letter-spacing: 0.5px;
+}
+.preview-remove-btn {
+  position: absolute; top: 4px; right: 4px;
+  width: 20px; height: 20px; border-radius: 50%;
+  background: rgba(14,17,23,0.65); border: none; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  opacity: 0; transition: opacity 0.15s;
+  backdrop-filter: blur(4px);
+}
+.preview-slot.has-image:hover .preview-remove-btn { opacity: 1; }
+.preview-remove-btn svg { width: 10px; height: 10px; color: #fff; }
+
+/* ============================================================
+   CATEGORY GRID — uniform square cards, icon + label vertical
+============================================================ */
+.category-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+}
+.cat-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  aspect-ratio: 1 / 1;
+  border: 1.5px solid var(--border);
+  border-radius: var(--r-md);
+  background: var(--surface);
+  cursor: pointer;
+  transition: border-color 0.14s, background 0.14s, box-shadow 0.14s;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  padding: 6px 4px;
+  text-align: center;
+}
+.cat-card:hover:not(.selected) {
+  border-color: var(--accent);
+  background: var(--accent-light);
+}
+.cat-card.selected {
+  border-color: var(--accent);
+  background: var(--accent-light);
+  box-shadow: 0 0 0 3px rgba(59,127,236,0.14);
+}
+.cat-card-icon {
+  width: 28px; height: 28px;
+  display: flex; align-items: center; justify-content: center;
+  color: var(--ink-3);
+  transition: color 0.14s;
+  flex-shrink: 0;
+}
+.cat-card-icon svg { width: 22px; height: 22px; }
+.cat-card.selected .cat-card-icon,
+.cat-card:hover:not(.selected) .cat-card-icon { color: var(--accent-dark); }
+.cat-card-label {
+  font-size: 9.5px;
+  font-weight: 600;
+  color: var(--ink-2);
+  line-height: 1.2;
+  word-break: break-word;
+  max-width: 100%;
+}
+.cat-card.selected .cat-card-label { color: var(--accent-dark); }
+
+/* ============================================================
+   SUBMIT SECTION
+============================================================ */
+.submit-section {
+  padding: 22px; border-top: 1px solid var(--border);
+  display: flex; flex-direction: column; gap: 12px;
+}
+.submit-btn {
+  width: 100%; padding: 13px 24px;
+  border-radius: var(--r-md); border: none;
+  background: var(--accent); color: #fff;
+  font-family: var(--font); font-size: 15px; font-weight: 600;
+  cursor: pointer; display: flex; align-items: center; justify-content: center;
+  gap: 8px;
+  transition: background 0.15s, transform 0.12s, box-shadow 0.15s;
+  box-shadow: 0 4px 14px rgba(59,127,236,0.28);
+  letter-spacing: -0.1px;
+}
+.submit-btn:hover:not(:disabled) {
+  background: var(--accent-dark);
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px rgba(59,127,236,0.32);
+}
+.submit-btn:active:not(:disabled) { transform: translateY(0); }
+.submit-btn:disabled { opacity: 0.65; cursor: not-allowed; transform: none; }
+.spinner {
+  width: 17px; height: 17px;
+  border: 2px solid rgba(255,255,255,0.4);
+  border-top-color: #fff; border-radius: 50%;
+  animation: spin 0.65s linear infinite; flex-shrink: 0;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+.form-status {
+  display: none; padding: 12px 14px; border-radius: var(--r-sm);
+  font-size: 13px; font-weight: 500; align-items: center; gap: 10px; line-height: 1.4;
+}
+.form-status.visible { display: flex; }
+.form-status.success { background: var(--success-light); border: 1px solid rgba(26,158,92,0.2); color: var(--success); }
+.form-status.error   { background: var(--danger-light);  border: 1px solid rgba(229,62,62,0.2);  color: var(--danger); }
+.form-status-icon {
+  width: 28px; height: 28px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+}
+.form-status.success .form-status-icon { background: rgba(26,158,92,0.12); }
+.form-status.error   .form-status-icon { background: rgba(229,62,62,0.12); }
+.form-status-icon svg { width: 14px; height: 14px; }
+.form-status-text strong { display: block; font-size: 13px; margin-bottom: 1px; }
+.form-status-text span { font-size: 12px; opacity: 0.75; font-weight: 400; }
+
+/* ============================================================
+   RESPONSIVE
+============================================================ */
+@media (max-width: 360px) {
+  .category-grid { grid-template-columns: repeat(3, 1fr); }
+  .image-previews { grid-template-columns: repeat(4, 1fr); }
+}
+@media (min-width: 560px) {
+  .page-wrapper { padding: 40px 24px 80px; }
+}
+</style>
+</head>
+<body>
+
+<div class="page-wrapper">
+<div class="form-shell">
+
+  <!-- Page header -->
+  <div class="page-header">
+    <div class="page-header-icon">
+      <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M20 7H4a2 2 0 00-2 2v10a2 2 0 002 2h16a2 2 0 002-2V9a2 2 0 00-2-2z"/>
+        <path d="M16 7V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v2"/>
+        <line x1="12" y1="12" x2="12" y2="16"/>
+        <line x1="10" y1="14" x2="14" y2="14"/>
+      </svg>
+    </div>
+    <div>
+      <div class="page-header-title">Add New Product</div>
+      <div class="page-header-sub">Fill in the details to list your product</div>
+    </div>
+  </div>
+
+  <div class="form-card">
+  <form id="productForm" novalidate>
+
+    <!-- ===================================================
+         1. PRODUCT IMAGES
+    =================================================== -->
+    <div class="form-section">
+      <div class="field-wrapper" id="imagesFieldWrapper">
+        <label class="field-label field-label-required">Product Images</label>
+        <p style="font-size:12px;color:var(--ink-4);margin-bottom:12px;line-height:1.5;">
+          All 4 images are required. First image is always the <strong style="color:var(--ink-2);">main / front image</strong>. Tap a filled slot to remove it.
+        </p>
+
+        <!-- Progress dots -->
+        <div class="upload-progress-row">
+          <div class="upload-progress-label"><span id="imageCountLabel">0</span> / 4 images added</div>
+          <div class="upload-progress-dots" id="progressDots">
+            <div class="upload-dot" id="dot-0"></div>
+            <div class="upload-dot" id="dot-1"></div>
+            <div class="upload-dot" id="dot-2"></div>
+            <div class="upload-dot" id="dot-3"></div>
+          </div>
+        </div>
+
+        <!-- Preview slots (always visible) -->
+        <div class="image-previews" id="imagePreviews">
+          <!-- Rendered by JS -->
+        </div>
+
+        <!-- Upload buttons row -->
+        <div class="upload-buttons-row" style="margin-top:12px;">
+          <!-- Gallery / file picker -->
+          <div class="upload-btn" id="galleryBtn">
+            <input type="file" id="galleryInput" accept="image/*" multiple aria-label="Upload from gallery"/>
+            <div class="upload-btn-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="3" y="3" width="18" height="18" rx="2"/>
+                <path d="M3 15l5-5 4 4 3-3 6 6"/>
+                <circle cx="8.5" cy="8.5" r="1.5"/>
+              </svg>
+            </div>
+            <div class="upload-btn-label">Upload from Gallery</div>
+            <div class="upload-btn-sub">JPG, PNG, WEBP</div>
+          </div>
+
+          <!-- Camera -->
+          <div class="upload-btn" id="cameraBtn">
+            <input type="file" id="cameraInput" accept="image/*" capture="environment" aria-label="Take photo with camera"/>
+            <div class="upload-btn-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z"/>
+                <circle cx="12" cy="13" r="4"/>
+              </svg>
+            </div>
+            <div class="upload-btn-label">Open Camera</div>
+            <div class="upload-btn-sub">Click &amp; capture directly</div>
+          </div>
+        </div>
+
+        <div class="field-error" id="imagesError">
+          <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><circle cx="6" cy="6" r="5" stroke="currentColor" stroke-width="1.4"/><path d="M6 3.5v3M6 8.5v.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
+          All 4 product images are required before submitting.
+        </div>
+      </div>
+    </div>
+
+    <div class="form-divider"></div>
+
+    <!-- ===================================================
+         2. PRODUCT TITLE
+    =================================================== -->
+    <div class="form-section">
+      <div class="field-wrapper" id="titleFieldWrapper">
+        <label class="field-label field-label-required" for="productTitle">Product Title</label>
+        <input type="text" id="productTitle" name="title" class="field-input"
+               placeholder="Enter product title" maxlength="120" autocomplete="off"/>
+        <div class="field-error" id="titleError">
+          <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><circle cx="6" cy="6" r="5" stroke="currentColor" stroke-width="1.4"/><path d="M6 3.5v3M6 8.5v.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
+          Product title is required.
+        </div>
+      </div>
+    </div>
+
+    <div class="form-divider"></div>
+
+    <!-- ===================================================
+         3. CATEGORY
+    =================================================== -->
+    <div class="form-section">
+      <div class="field-wrapper" id="categoryFieldWrapper">
+        <label class="field-label field-label-required">Category</label>
+        <div class="category-grid" id="categoryGrid" role="radiogroup" aria-label="Product category">
+          <!-- Injected by JS -->
+        </div>
+        <input type="hidden" id="selectedCategory" name="category"/>
+        <div class="field-error" id="categoryError">
+          <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><circle cx="6" cy="6" r="5" stroke="currentColor" stroke-width="1.4"/><path d="M6 3.5v3M6 8.5v.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
+          Please select a category.
+        </div>
+      </div>
+    </div>
+
+    <div class="form-divider"></div>
+
+    <!-- ===================================================
+         4. BRAND NAME
+    =================================================== -->
+    <div class="form-section">
+      <label class="field-label" for="brandName">Brand Name</label>
+      <input type="text" id="brandName" name="brand" class="field-input"
+             placeholder="Enter brand name (if applicable)" maxlength="80" autocomplete="off"/>
+    </div>
+
+    <div class="form-divider"></div>
+
+    <!-- ===================================================
+         5. MRP
+    =================================================== -->
+    <div class="form-section">
+      <div class="field-wrapper" id="mrpFieldWrapper">
+        <label class="field-label field-label-required" for="mrpInput">MRP</label>
+        <div class="price-wrap">
+          <div class="price-prefix" aria-hidden="true">₹</div>
+          <input type="number" id="mrpInput" name="mrp" class="price-input"
+                 placeholder="0.00" min="1" step="0.01" inputmode="decimal"/>
+        </div>
+        <div class="field-error" id="mrpError">
+          <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><circle cx="6" cy="6" r="5" stroke="currentColor" stroke-width="1.4"/><path d="M6 3.5v3M6 8.5v.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
+          Please enter a valid MRP (greater than 0).
+        </div>
+      </div>
+    </div>
+
+    <div class="form-divider"></div>
+
+    <!-- ===================================================
+         SUBMIT
+    =================================================== -->
+    <div class="submit-section">
+      <div class="form-status" id="formStatus" role="alert" aria-live="polite">
+        <div class="form-status-icon" id="statusIcon"></div>
+        <div class="form-status-text" id="statusText"></div>
+      </div>
+      <button type="submit" class="submit-btn" id="submitBtn">
+        <svg id="submitIcon" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M5 12h14M12 5l7 7-7 7"/>
+        </svg>
+        <span id="submitLabel">Submit Product</span>
+      </button>
+    </div>
+
+  </form>
+  </div><!-- /form-card -->
+</div><!-- /form-shell -->
+</div><!-- /page-wrapper -->
+
+
+
+
+
+
+
+
+<script>
+
+
+
+
+/* ============================================================
+   CONFIG
+============================================================ */
+
+const MAX_IMAGES   = 4;
+
+/* Category data — label + outlined SVG path(s) */
+const CATEGORIES = [
+  {
+    id: "medicine",
+    label: "Medicine",
+    svg: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/>
+      <path d="M12 5 9.04 7.96l2.08 2.08 2.08-2.08L12 5Z"/>
+    </svg>`
+  },
+  {
+    id: "groceries",
+    label: "Groceries",
+    svg: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/>
+      <line x1="3" y1="6" x2="21" y2="6"/>
+      <path d="M16 10a4 4 0 0 1-8 0"/>
+    </svg>`
+  },
+  {
+    id: "fashion",
+    label: "Fashion",
+    svg: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M20.38 3.46 16 2a4 4 0 0 1-8 0L3.62 3.46a2 2 0 0 0-1.34 2.23l.58 3.57a1 1 0 0 0 .99.84H6v10c0 1.1.9 2 2 2h8a2 2 0 0 0 2-2V10h2.15a1 1 0 0 0 .99-.84l.58-3.57a2 2 0 0 0-1.34-2.23z"/>
+    </svg>`
+  },
+  {
+    id: "sports",
+    label: "Sports & Fitness",
+    svg: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="12" cy="12" r="10"/>
+      <path d="M4.93 4.93l4.24 4.24"/>
+      <path d="M14.83 9.17l4.24-4.24"/>
+      <path d="M14.83 14.83l4.24 4.24"/>
+      <path d="M9.17 14.83l-4.24 4.24"/>
+      <circle cx="12" cy="12" r="4"/>
+    </svg>`
+  },
+  {
+    id: "pet",
+    label: "Pet Supplies",
+    svg: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M10 5.172C10 3.782 8.423 2.679 6.5 3c-2.823.47-4.113 6.006-4 7 .08.703 1.725 1.722 3.656 1 1.261-.472 1.96-1.45 2.344-2.5"/>
+      <path d="M14.267 5.172c0-1.39 1.577-2.493 3.5-2.172 2.823.47 4.113 6.006 4 7-.08.703-1.725 1.722-3.656 1-1.261-.472-1.855-1.45-2.239-2.5"/>
+      <path d="M8 14v.5"/>
+      <path d="M16 14v.5"/>
+      <path d="M11.25 16.25h1.5L12 17l-.75-.75z"/>
+      <path d="M4.42 11.247A13.152 13.152 0 0 0 4 14.556C4 18.728 7.582 21 12 21s8-2.272 8-6.444c0-1.061-.162-2.2-.493-3.309m-9.243-6.082A8.801 8.801 0 0 1 12 5c.78 0 1.5.108 2.161.306"/>
+    </svg>`
+  },
+  {
+    id: "music",
+    label: "Musical Instruments",
+    svg: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M9 18V5l12-2v13"/>
+      <circle cx="6" cy="18" r="3"/>
+      <circle cx="18" cy="16" r="3"/>
+    </svg>`
+  },
+  {
+    id: "beauty",
+    label: "Beauty & Care",
+    svg: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+      <line x1="12" y1="8" x2="12" y2="12"/>
+      <line x1="10" y1="10" x2="14" y2="10"/>
+    </svg>`
+  },
+  {
+    id: "gifts",
+    label: "Gift & Toys",
+    svg: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+      <polyline points="20 12 20 22 4 22 4 12"/>
+      <rect x="2" y="7" width="20" height="5"/>
+      <line x1="12" y1="22" x2="12" y2="7"/>
+      <path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"/>
+      <path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"/>
+    </svg>`
+  },
+  {
+    id: "books",
+    label: "Books & Stationery",
+    svg: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/>
+      <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/>
+    </svg>`
+  },
+  {
+    id: "appliances",
+    label: "Appliances",
+    svg: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+      <rect x="3" y="2" width="7" height="20"/>
+      <rect x="14" y="2" width="7" height="20"/>
+      <line x1="10" y1="7" x2="14" y2="7"/>
+      <line x1="10" y1="17" x2="14" y2="17"/>
+    </svg>`
+  },
+  {
+    id: "electronics",
+    label: "Electronics",
+    svg: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+      <rect x="2" y="7" width="20" height="14" rx="2"/>
+      <path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/>
+      <line x1="12" y1="12" x2="12.01" y2="12"/>
+    </svg>`
+  },
+  {
+    id: "others",
+    label: "Others / Mixed",
+    svg: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="12" cy="12" r="10"/>
+      <line x1="12" y1="8" x2="12" y2="12"/>
+      <line x1="12" y1="16" x2="12.01" y2="16"/>
+    </svg>`
+  },
+];
+
+/* ============================================================
+   STATE
+============================================================ */
+const state = {
+  images:   [],   // Array of { file, dataUrl } — index 0 is always main
+  category: "",
+};
+
+/* ============================================================
+   DOM REFS
+============================================================ */
+const galleryInput        = document.getElementById("galleryInput");
+const cameraInput         = document.getElementById("cameraInput");
+const galleryBtn          = document.getElementById("galleryBtn");
+const cameraBtn           = document.getElementById("cameraBtn");
+const imagePreviews       = document.getElementById("imagePreviews");
+const imageCountLabel     = document.getElementById("imageCountLabel");
+const productTitle        = document.getElementById("productTitle");
+const categoryGrid        = document.getElementById("categoryGrid");
+const selectedCategoryInp = document.getElementById("selectedCategory");
+const brandName           = document.getElementById("brandName");
+const mrpInput            = document.getElementById("mrpInput");
+const productForm         = document.getElementById("productForm");
+const submitBtn           = document.getElementById("submitBtn");
+const submitLabel         = document.getElementById("submitLabel");
+const formStatus          = document.getElementById("formStatus");
+const statusIcon          = document.getElementById("statusIcon");
+const statusText          = document.getElementById("statusText");
+
+/* ============================================================
+   CATEGORY CARDS — RENDER
+============================================================ */
+function renderCategories() {
+  categoryGrid.innerHTML = CATEGORIES.map((cat) => `
+    <div class="cat-card" role="radio" aria-checked="false" tabindex="0" data-id="${escAttr(cat.id)}">
+      <div class="cat-card-icon">${cat.svg}</div>
+      <div class="cat-card-label">${escHtml(cat.label)}</div>
+    </div>
+  `).join("");
+
+  categoryGrid.querySelectorAll(".cat-card").forEach((card) => {
+    card.addEventListener("click", () => selectCategory(card));
+    card.addEventListener("keydown", (e) => {
+      if (e.key === "Enter" || e.key === " ") { e.preventDefault(); selectCategory(card); }
+    });
+  });
+}
+
+function selectCategory(card) {
+  categoryGrid.querySelectorAll(".cat-card").forEach((c) => {
+    c.classList.remove("selected");
+    c.setAttribute("aria-checked", "false");
+  });
+  card.classList.add("selected");
+  card.setAttribute("aria-checked", "true");
+  state.category = card.dataset.id;
+  selectedCategoryInp.value = state.category;
+  clearError("categoryFieldWrapper", "categoryError");
+}
+
+/* ============================================================
+   IMAGE HANDLING
+============================================================ */
+galleryInput.addEventListener("change", (e) => {
+  handleFiles(Array.from(e.target.files));
+  galleryInput.value = "";
+});
+
+cameraInput.addEventListener("change", (e) => {
+  handleFiles(Array.from(e.target.files));
+  cameraInput.value = "";
+});
+
+/* Drag and drop on the preview area */
+imagePreviews.addEventListener("dragover", (e) => e.preventDefault());
+imagePreviews.addEventListener("drop", (e) => {
+  e.preventDefault();
+  const files = Array.from(e.dataTransfer.files).filter((f) => f.type.startsWith("image/"));
+  handleFiles(files);
+});
+
+function handleFiles(files) {
+  const remaining = MAX_IMAGES - state.images.length;
+  if (remaining <= 0) { alert("You've already added 4 images. Remove one to replace it."); return; }
+  const toProcess = files.slice(0, remaining);
+  toProcess.forEach((file) => {
+    if (!file.type.startsWith("image/")) return;
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      state.images.push({ file, dataUrl: e.target.result });
+      renderPreviews();
+      clearError("imagesFieldWrapper", "imagesError");
+    };
+    reader.readAsDataURL(file);
+  });
+}
+
+function removeImage(index) {
+  state.images.splice(index, 1);
+  renderPreviews();
+}
+
+/* Update upload button availability */
+function updateUploadButtons() {
+  const full = state.images.length >= MAX_IMAGES;
+  [galleryBtn, cameraBtn].forEach((btn) => {
+    btn.style.opacity = full ? "0.45" : "";
+    btn.style.pointerEvents = full ? "none" : "";
+    const inp = btn.querySelector("input");
+    if (inp) inp.disabled = full;
+  });
+  if (full) {
+    galleryBtn.querySelector(".upload-btn-sub").textContent = "Maximum reached";
+    cameraBtn.querySelector(".upload-btn-sub").textContent  = "Maximum reached";
+  } else {
+    galleryBtn.querySelector(".upload-btn-sub").textContent = "JPG, PNG, WEBP";
+    cameraBtn.querySelector(".upload-btn-sub").textContent  = "Click & capture directly";
+  }
+}
+
+/* Render the 4 fixed preview slots */
+function renderPreviews() {
+  imagePreviews.innerHTML = "";
+
+  for (let i = 0; i < MAX_IMAGES; i++) {
+    const img = state.images[i];
+    const slot = document.createElement("div");
+    slot.className = "preview-slot" + (img ? " has-image" : "") + (i === 0 && img ? " is-main" : "");
+
+    if (img) {
+      /* Filled slot */
+      const imgEl = document.createElement("img");
+      imgEl.src = img.dataUrl;
+      imgEl.alt = `Product image ${i + 1}`;
+      slot.appendChild(imgEl);
+
+      /* Main badge for slot 0 */
+      if (i === 0) {
+        const badge = document.createElement("div");
+        badge.className = "preview-main-badge";
+        badge.innerHTML = "<span>Main</span>";
+        slot.appendChild(badge);
+      }
+
+      /* Remove button */
+      const removeBtn = document.createElement("button");
+      removeBtn.type = "button";
+      removeBtn.className = "preview-remove-btn";
+      removeBtn.setAttribute("aria-label", `Remove image ${i + 1}`);
+      removeBtn.innerHTML = `<svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M1 1l10 10M11 1L1 11"/></svg>`;
+      removeBtn.addEventListener("click", (e) => { e.stopPropagation(); removeImage(i); });
+      slot.appendChild(removeBtn);
+
+    } else {
+      /* Empty slot */
+      const num = document.createElement("div");
+      num.className = "preview-slot-num";
+      num.textContent = i === 0 ? "Main" : `${i + 1}`;
+      const lbl = document.createElement("div");
+      lbl.style.cssText = "font-size:9px;color:var(--ink-4);";
+      lbl.textContent = "Empty";
+      slot.appendChild(num);
+      slot.appendChild(lbl);
+    }
+
+    imagePreviews.appendChild(slot);
+  }
+
+  /* Update count label & progress dots */
+  const count = state.images.length;
+  imageCountLabel.textContent = count;
+
+  for (let i = 0; i < MAX_IMAGES; i++) {
+    const dot = document.getElementById(`dot-${i}`);
+    if (!dot) continue;
+    dot.className = "upload-dot";
+    if (i < count) dot.classList.add(i === 0 ? "main-dot" : "filled");
+  }
+
+  updateUploadButtons();
+}
+
+/* ============================================================
+   VALIDATION
+============================================================ */
+function showError(wrapperId, errorId) {
+  document.getElementById(wrapperId).classList.add("has-error");
+  document.getElementById(errorId).classList.add("visible");
+}
+function clearError(wrapperId, errorId) {
+  document.getElementById(wrapperId).classList.remove("has-error");
+  document.getElementById(errorId).classList.remove("visible");
+}
+
+function validateForm() {
+  let valid = true;
+
+  /* All 4 images required */
+  if (state.images.length < MAX_IMAGES) {
+    showError("imagesFieldWrapper", "imagesError");
+    valid = false;
+  } else {
+    clearError("imagesFieldWrapper", "imagesError");
+  }
+
+  /* Title */
+  if (!productTitle.value.trim()) {
+    showError("titleFieldWrapper", "titleError");
+    valid = false;
+  } else {
+    clearError("titleFieldWrapper", "titleError");
+  }
+
+  /* Category */
+  if (!state.category) {
+    showError("categoryFieldWrapper", "categoryError");
+    valid = false;
+  } else {
+    clearError("categoryFieldWrapper", "categoryError");
+  }
+
+  /* MRP */
+  const mrpVal = parseFloat(mrpInput.value);
+  if (!mrpInput.value || isNaN(mrpVal) || mrpVal <= 0) {
+    showError("mrpFieldWrapper", "mrpError");
+    valid = false;
+  } else {
+    clearError("mrpFieldWrapper", "mrpError");
+  }
+
+  return valid;
+}
+
+/* Clear errors on input */
+productTitle.addEventListener("input", () => clearError("titleFieldWrapper", "titleError"));
+mrpInput.addEventListener("input", () => clearError("mrpFieldWrapper", "mrpError"));
+
+/* ============================================================
+   BUILD PAYLOAD
+============================================================ */
+function buildPayload() {
+  return {
+    title:    productTitle.value.trim(),
+    category: state.category,
+    brand:    brandName.value.trim() || null,
+    mrp:      parseFloat(mrpInput.value),
+    images: state.images.map(({ dataUrl }, i) => ({
+  dataUrl,
+  isMain: i === 0
+})),
+    mainImageIndex: 0,
+  };
+}
+
+/* ============================================================
+   SUBMIT
+============================================================ */
+productForm.addEventListener("submit", async (e) => {
+  e.preventDefault();
+  hideStatus();
+
+  if (!validateForm()) {
+    const firstErr = productForm.querySelector(".field-error.visible");
+    if (firstErr) firstErr.scrollIntoView({ behavior: "smooth", block: "center" });
+    return;
+  }
+
+  setLoadingState(true);
+  const payload = buildPayload();
+  console.log("Submitting:", payload);
+
+  try {
+    await submitToSupabase(payload);
+    showStatus("success", "Product submitted successfully!", "Your product listing has been created and is under review.");
+  } catch (err) {
+    showStatus("error", "Submission failed", err.message || "Something went wrong. Please try again.");
+  } finally {
+    setLoadingState(false);
+  }
+});
+
+/* ============================================================
+   SUPABASE API
+============================================================ */
+const SUPABASE_URL = "https://gkbwrjkyhaywquivadey.supabase.co";
+const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdrYndyamt5aGF5d3F1aXZhZGV5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzkwODM3MDYsImV4cCI6MjA5NDY1OTcwNn0.U0vpLnQjSaHoV2Tys8ULjjQ2UnmAl6-KSI_so2COcCE";
+
+async function submitToSupabase(payload) {
+  try {
+    const response = await fetch(`${SUPABASE_URL}/rest/v1/draft_products`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "apikey": SUPABASE_KEY,
+        "Authorization": `Bearer ${SUPABASE_KEY}`
+      },
+      body: JSON.stringify({
+        product_title: payload.title,
+        category: payload.category,
+        brand_name: payload.brand,
+        mrp: payload.mrp,
+
+        images: payload.images,
+        main_image_index: payload.mainImageIndex,
+
+        status: "draft",
+        source: "manual_form",
+
+        raw_input: payload
+      })
+    });
+
+    if (!response.ok) {
+      const text = await response.text();
+      throw new Error(text || "Insert failed");
+    }
+
+    return true;
+
+  } catch (err) {
+    console.error("Supabase error:", err);
+    throw err;
+  }
+}
+/* ============================================================
+   UI STATE HELPERS
+============================================================ */
+function setLoadingState(loading) {
+  submitBtn.disabled = loading;
+  if (loading) {
+    document.getElementById("submitIcon").outerHTML = `<div class="spinner" id="submitIcon"></div>`;
+    submitLabel.textContent = "Submitting…";
+  } else {
+    const sp = document.getElementById("submitIcon");
+    if (sp && sp.classList.contains("spinner")) {
+      sp.outerHTML = `<svg id="submitIcon" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>`;
+    }
+    submitLabel.textContent = "Submit Product";
+  }
+}
+
+function showStatus(type, title, sub) {
+  formStatus.className = `form-status visible ${type}`;
+  const icon = type === "success"
+    ? `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>`
+    : `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 8v4M12 16v.5"/></svg>`;
+  statusIcon.innerHTML = icon;
+  statusText.innerHTML = `<strong>${escHtml(title)}</strong><span>${escHtml(sub)}</span>`;
+  formStatus.scrollIntoView({ behavior: "smooth", block: "nearest" });
+}
+
+function hideStatus() {
+  formStatus.className = "form-status";
+  statusIcon.innerHTML = "";
+  statusText.innerHTML = "";
+}
+
+/* ============================================================
+   UTILITIES
+============================================================ */
+function escHtml(s) {
+  return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");
+}
+function escAttr(s) {
+  return String(s).replace(/"/g,"&quot;");
+}
+
+/* ============================================================
+   INIT
+============================================================ */
+renderCategories();
+renderPreviews(); /* Show empty slots immediately */
+</script>
+</body>
+</html>
