@@ -806,11 +806,14 @@ function handleFiles(files) {
   toProcess.forEach((file) => {
     if (!file.type.startsWith("image/")) return;
     const reader = new FileReader();
-    reader.onload = (e) => {
-      state.images.push({ file, dataUrl: e.target.result });
-      renderPreviews();
-      clearError("imagesFieldWrapper", "imagesError");
-    };
+    reader.onload = async (e) => {
+  const compressed = await compressImage(file);
+
+  state.images.push({ file, dataUrl: e.target.result });
+
+  renderPreviews();
+  clearError("imagesFieldWrapper", "imagesError");
+};
     reader.readAsDataURL(file);
   });
 }
@@ -955,6 +958,11 @@ function validateForm() {
 productTitle.addEventListener("input", () => clearError("titleFieldWrapper", "titleError"));
 mrpInput.addEventListener("input", () => clearError("mrpFieldWrapper", "mrpError"));
 
+
+
+
+
+   
 /* ============================================================
    BUILD PAYLOAD
 ============================================================ */
@@ -986,7 +994,42 @@ productForm.addEventListener("submit", async (e) => {
   }
 
   setLoadingState(true);
-  const payload = buildPayload();
+const uploadPromises = state.images.map(async (img, i) => {
+
+  // STEP 1: compress image
+  const compressed = await compressImage(img.file);
+
+  // STEP 2: convert to blob
+  const blob = dataURLtoBlob(compressed);
+
+  // STEP 3: generate better file name
+  const fileName = `products/${Date.now()}_${Math.random().toString(36).substring(2,8)}_${i}.jpg`;
+
+  // STEP 4: upload
+  const url = await uploadImageToSupabase(blob, fileName);
+
+  return {
+    url,
+    isMain: i === 0
+  };
+});
+
+// STEP 5: wait for ALL uploads together
+const uploadedImages = await Promise.all(uploadPromises);
+
+const payload = {
+  title: productTitle.value.trim(),
+  category: state.category,
+  brand: brandName.value.trim() || null,
+  mrp: parseFloat(mrpInput.value),
+  images: uploadedImages,
+  mainImageIndex: 0
+};
+   if (JSON.stringify(payload).length > 2_000_000) {
+  showStatus("error", "Images too large", "Please upload smaller images.");
+  setLoadingState(false);
+  return;
+}
   console.log("Submitting:", payload);
 
   try {
@@ -1083,6 +1126,83 @@ function hideStatus() {
   statusText.innerHTML = "";
 }
 
+
+
+/* ============================================================
+   COMPRESS IMAGES
+============================================================ */
+
+async function compressImage(file) {
+  return new Promise((resolve) => {
+    const img = new Image();
+    const reader = new FileReader();
+
+    reader.onload = (e) => {
+      img.src = e.target.result;
+    };
+
+    img.onload = () => {
+      const canvas = document.createElement("canvas");
+      const ctx = canvas.getContext("2d");
+
+      const MAX_WIDTH = 600;
+      const scale = Math.min(MAX_WIDTH / img.width, 1);
+
+      canvas.width = img.width * scale;
+      canvas.height = img.height * scale;
+
+      ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+
+      resolve(canvas.toDataURL("image/jpeg", 0.6)); // compressed
+    };
+
+    reader.readAsDataURL(file);
+  });
+}
+
+
+function dataURLtoBlob(dataUrl) {
+  const arr = dataUrl.split(',');
+  const mime = arr[0].match(/:(.*?);/)[1];
+  const bstr = atob(arr[1]);
+  let n = bstr.length;
+  const u8arr = new Uint8Array(n);
+
+  while (n--) {
+    u8arr[n] = bstr.charCodeAt(n);
+  }
+
+  return new Blob([u8arr], { type: mime });
+}
+
+
+
+   
+/* ============================================================
+   IMAGES-UPLOAD
+============================================================ */
+
+   async function uploadImageToSupabase(file, fileName) {
+  const response = await fetch(
+    `${SUPABASE_URL}/storage/v1/object/raw-product-images/${fileName}`,
+    {
+      method: "POST",
+      headers: {
+        "apikey": SUPABASE_KEY,
+        "Authorization": `Bearer ${SUPABASE_KEY}`,
+        "Content-Type": file.type
+      },
+      body: file
+    }
+  );
+
+  if (!response.ok) {
+    throw new Error("Image upload failed");
+  }
+
+  return `${SUPABASE_URL}/storage/v1/object/public/product-images/${fileName}`;
+}
+   
 /* ============================================================
    UTILITIES
 ============================================================ */
