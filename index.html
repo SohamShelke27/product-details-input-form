@@ -1050,7 +1050,13 @@ const payload = {
 
   try {
     await submitToSupabase(payload);
-    showStatus("success", "Product submitted successfully!", "Your product listing has been created and is under review.");
+    showStatus(
+  "success",
+  "Product submitted successfully!",
+  "Product saved successfully."
+);
+
+resetForm();
   } catch (err) {
     showStatus("error", "Submission failed", err.message || "Something went wrong. Please try again.");
   } finally {
@@ -1109,6 +1115,49 @@ async function submitToSupabase(payload) {
     throw err;
   }
 }
+
+   
+/* ============================================================
+   FORM-FIELDS RESET AFTER SUCCESSFUL SUBMISSION
+============================================================ */
+function resetForm() {
+
+  // Reset native form fields
+  productForm.reset();
+
+  // Reset category state
+  state.category = "";
+  selectedCategoryInp.value = "";
+
+  // Remove selected category UI
+  categoryGrid.querySelectorAll(".cat-card").forEach((card) => {
+    card.classList.remove("selected");
+    card.setAttribute("aria-checked", "false");
+  });
+
+  // Reset images array
+  state.images = [];
+
+  // Re-render previews
+  renderPreviews();
+
+  // Clear all errors
+  clearError("imagesFieldWrapper", "imagesError");
+  clearError("titleFieldWrapper", "titleError");
+  clearError("categoryFieldWrapper", "categoryError");
+  clearError("mrpFieldWrapper", "mrpError");
+
+  // Scroll back to top
+  window.scrollTo({
+    top: 0,
+    behavior: "smooth"
+  });
+}
+
+
+
+
+   
 /* ============================================================
    UI STATE HELPERS
 ============================================================ */
