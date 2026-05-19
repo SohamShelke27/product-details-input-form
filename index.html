@@ -807,9 +807,10 @@ function handleFiles(files) {
     if (!file.type.startsWith("image/")) return;
     const reader = new FileReader();
     reader.onload = async (e) => {
-  const compressed = await compressImage(file);
-
-  state.images.push({ file, dataUrl: e.target.result });
+state.images.push({
+  file,
+  dataUrl: e.target.result
+});
 
   renderPreviews();
   clearError("imagesFieldWrapper", "imagesError");
@@ -1190,7 +1191,7 @@ function dataURLtoBlob(dataUrl) {
       headers: {
         "apikey": SUPABASE_KEY,
         "Authorization": `Bearer ${SUPABASE_KEY}`,
-        "Content-Type": file.type
+        "Content-Type": "image/jpeg"
       },
       body: file
     }
