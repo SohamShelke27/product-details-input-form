@@ -1049,7 +1049,17 @@ const payload = {
   console.log("Submitting:", payload);
 
   try {
-    await submitToSupabase(payload);
+    const insertedRow = await submitToSupabase(payload);
+
+await fetch("YOUR_N8N_WEBHOOK_URL", {
+  method: "POST",
+  headers: {
+    "Content-Type": "application/json"
+  },
+  body: JSON.stringify({
+    draft_product_id: insertedRow[0].id
+  })
+});
     showStatus(
   "success",
   "Product submitted successfully!",
