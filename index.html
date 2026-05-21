@@ -1051,7 +1051,7 @@ const payload = {
   try {
     const insertedRow = await submitToSupabase(payload);
 
-await fetch("YOUR_N8N_WEBHOOK_URL", {
+await fetch("https://shelkesoham27.app.n8n.cloud/webhook/draft-product-process", {
   method: "POST",
   headers: {
     "Content-Type": "application/json"
