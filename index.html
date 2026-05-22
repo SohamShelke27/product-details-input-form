@@ -1048,19 +1048,61 @@ const payload = {
 }
   console.log("Submitting:", payload);
 
-  try {
-    const insertedRow = await submitToSupabase(payload);
+try {
 
-await fetch("https://shelkesoham27.app.n8n.cloud/webhook/draft-product-process", {
-  method: "POST",
-  headers: {
-    "Content-Type": "application/json"
-  },
-  body: JSON.stringify({
-    draft_product_id: insertedRow[0].id
-  })
-});
-    showStatus(
+  // STEP 1: save into Supabase
+  const insertedRow = await submitToSupabase(payload);
+
+  console.log("Supabase insert success:", insertedRow);
+
+  // STEP 2: trigger n8n webhook separately
+  try {
+
+    const webhookResponse = await fetch(
+      "https://shelkesoham27.app.n8n.cloud/webhook/draft-product-process",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          draft_product_id: insertedRow[0].id
+        })
+      }
+    );
+
+    console.log("Webhook response:", webhookResponse.status);
+
+  } catch (webhookErr) {
+
+    console.error("Webhook failed:", webhookErr);
+
+  }
+
+  // STEP 3: success UI
+  showStatus(
+    "success",
+    "Product submitted successfully!",
+    "Product saved successfully."
+  );
+
+  resetForm();
+
+} catch (err) {
+
+  console.error(err);
+
+  showStatus(
+    "error",
+    "Submission failed",
+    err.message || "Something went wrong. Please try again."
+  );
+
+} finally {
+
+  setLoadingState(false);
+
+}    showStatus(
   "success",
   "Product submitted successfully!",
   "Product saved successfully."
