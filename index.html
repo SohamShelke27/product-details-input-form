@@ -1102,18 +1102,7 @@ try {
 
   setLoadingState(false);
 
-}    showStatus(
-  "success",
-  "Product submitted successfully!",
-  "Product saved successfully."
-);
-
-resetForm();
-  } catch (err) {
-    showStatus("error", "Submission failed", err.message || "Something went wrong. Please try again.");
-  } finally {
-    setLoadingState(false);
-  }
+} 
 });
 
 /* ============================================================
