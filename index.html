@@ -53,7 +53,13 @@ body {
 }
 
 /* ============================================================
-   LAYOUT
+   PAGE SWITCHING — section visibility
+============================================================ */
+.page-section { display: none; }
+.page-section.active { display: block; }
+
+/* ============================================================
+   FORM PAGE LAYOUT
 ============================================================ */
 .page-wrapper {
   min-height: 100dvh;
@@ -64,9 +70,6 @@ body {
 }
 .form-shell { width: 100%; max-width: 560px; }
 
-/* ============================================================
-   PAGE HEADER
-============================================================ */
 .page-header {
   display: flex; align-items: center; gap: 14px;
   margin-bottom: 28px;
@@ -80,15 +83,10 @@ body {
   box-shadow: 0 4px 12px rgba(59,127,236,0.28);
 }
 .page-header-icon svg { width: 20px; height: 20px; }
-.page-header-title {
-  font-size: 20px; font-weight: 700; color: var(--ink);
-  letter-spacing: -0.4px; line-height: 1.2;
-}
+.page-header-title { font-size: 20px; font-weight: 700; color: var(--ink); letter-spacing: -0.4px; line-height: 1.2; }
 .page-header-sub { font-size: 13px; color: var(--ink-3); margin-top: 2px; }
 
-/* ============================================================
-   FORM CARD
-============================================================ */
+/* FORM CARD */
 .form-card {
   background: var(--surface);
   border: 1px solid var(--border);
@@ -99,295 +97,121 @@ body {
 .form-section { padding: 22px 22px 0; }
 .form-divider { height: 1px; background: var(--border); margin: 22px 0 0; }
 
-/* ============================================================
-   FIELD LABELS & ERRORS
-============================================================ */
-.field-label {
-  display: block; font-size: 13px; font-weight: 600;
-  color: var(--ink-2); margin-bottom: 8px; letter-spacing: 0.1px;
-}
+/* FIELD LABELS & ERRORS */
+.field-label { display: block; font-size: 13px; font-weight: 600; color: var(--ink-2); margin-bottom: 8px; letter-spacing: 0.1px; }
 .field-label-required::after { content: " *"; color: var(--danger); font-weight: 400; }
-.field-error {
-  display: none; font-size: 12px; color: var(--danger);
-  margin-top: 5px; font-weight: 500; align-items: center; gap: 4px;
-}
+.field-error { display: none; font-size: 12px; color: var(--danger); margin-top: 5px; font-weight: 500; align-items: center; gap: 4px; }
 .field-error.visible { display: flex; }
 .field-error svg { flex-shrink: 0; }
 .field-wrapper.has-error .field-input,
 .field-wrapper.has-error .price-wrap { border-color: var(--danger) !important; }
-.field-wrapper.has-error .price-wrap { border-color: var(--danger); }
 
-/* ============================================================
-   TEXT INPUT
-============================================================ */
+/* TEXT INPUT */
 .field-input {
-  width: 100%;
-  padding: 10px 14px;
-  border: 1.5px solid var(--border);
-  border-radius: var(--r-sm);
+  width: 100%; padding: 10px 14px;
+  border: 1.5px solid var(--border); border-radius: var(--r-sm);
   font-family: var(--font); font-size: 14px; color: var(--ink);
   background: var(--surface); outline: none;
   transition: border-color 0.15s, box-shadow 0.15s;
   appearance: none; -webkit-appearance: none;
 }
 .field-input::placeholder { color: var(--ink-4); }
-.field-input:focus {
-  border-color: var(--border-focus);
-  box-shadow: 0 0 0 3px rgba(59,127,236,0.12);
-}
+.field-input:focus { border-color: var(--border-focus); box-shadow: 0 0 0 3px rgba(59,127,236,0.12); }
 
-/* ============================================================
-   PRICE INPUT
-============================================================ */
+/* PRICE INPUT */
 .price-wrap {
   display: flex; align-items: center;
-  border: 1.5px solid var(--border);
-  border-radius: var(--r-sm); overflow: hidden;
-  transition: border-color 0.15s, box-shadow 0.15s;
+  border: 1.5px solid var(--border); border-radius: var(--r-sm);
+  overflow: hidden; transition: border-color 0.15s, box-shadow 0.15s;
   background: var(--surface);
 }
-.price-wrap:focus-within {
-  border-color: var(--border-focus);
-  box-shadow: 0 0 0 3px rgba(59,127,236,0.12);
-}
-.price-prefix {
-  padding: 10px 12px; font-size: 14px; font-weight: 600;
-  color: var(--ink-3); background: var(--surface-2);
-  border-right: 1.5px solid var(--border);
-  font-family: var(--font-mono); user-select: none; flex-shrink: 0;
-}
-.price-input {
-  flex: 1; padding: 10px 14px; border: none;
-  font-family: var(--font); font-size: 14px; color: var(--ink);
-  background: transparent; outline: none; min-width: 0;
-}
+.price-wrap:focus-within { border-color: var(--border-focus); box-shadow: 0 0 0 3px rgba(59,127,236,0.12); }
+.price-prefix { padding: 10px 12px; font-size: 14px; font-weight: 600; color: var(--ink-3); background: var(--surface-2); border-right: 1.5px solid var(--border); font-family: var(--font-mono); user-select: none; flex-shrink: 0; }
+.price-input { flex: 1; padding: 10px 14px; border: none; font-family: var(--font); font-size: 14px; color: var(--ink); background: transparent; outline: none; min-width: 0; }
 .price-input::placeholder { color: var(--ink-4); }
-.price-input::-webkit-outer-spin-button,
-.price-input::-webkit-inner-spin-button { -webkit-appearance: none; }
+.price-input::-webkit-outer-spin-button, .price-input::-webkit-inner-spin-button { -webkit-appearance: none; }
 .price-input[type=number] { -moz-appearance: textfield; }
 
-/* ============================================================
-   IMAGE UPLOAD SECTION
-============================================================ */
-.upload-buttons-row {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 10px;
-  margin-bottom: 14px;
-}
+/* IMAGE UPLOAD */
+.upload-buttons-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 14px; }
 .upload-btn {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 7px;
-  padding: 16px 12px;
-  border: 1.5px dashed var(--border);
-  border-radius: var(--r-md);
-  background: var(--surface);
-  cursor: pointer;
-  transition: border-color 0.15s, background 0.15s;
-  text-align: center;
-  overflow: hidden;
+  position: relative; display: flex; flex-direction: column;
+  align-items: center; justify-content: center; gap: 7px;
+  padding: 16px 12px; border: 1.5px dashed var(--border);
+  border-radius: var(--r-md); background: var(--surface);
+  cursor: pointer; transition: border-color 0.15s, background 0.15s; text-align: center; overflow: hidden;
 }
 .upload-btn:hover { border-color: var(--accent); background: var(--accent-light); }
-.upload-btn input[type="file"] {
-  position: absolute; inset: 0; opacity: 0;
-  cursor: pointer; width: 100%; height: 100%;
-}
-.upload-btn-icon {
-  width: 36px; height: 36px; border-radius: var(--r-sm);
-  background: var(--surface-3);
-  display: flex; align-items: center; justify-content: center;
-  transition: background 0.15s;
-}
+.upload-btn input[type="file"] { position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; height: 100%; }
+.upload-btn-icon { width: 36px; height: 36px; border-radius: var(--r-sm); background: var(--surface-3); display: flex; align-items: center; justify-content: center; transition: background 0.15s; }
 .upload-btn:hover .upload-btn-icon { background: rgba(59,127,236,0.12); }
 .upload-btn-icon svg { width: 18px; height: 18px; color: var(--ink-3); }
 .upload-btn:hover .upload-btn-icon svg { color: var(--accent); }
-.upload-btn-label {
-  font-size: 12px; font-weight: 600; color: var(--ink-2); line-height: 1.3;
-}
+.upload-btn-label { font-size: 12px; font-weight: 600; color: var(--ink-2); line-height: 1.3; }
 .upload-btn-sub { font-size: 11px; color: var(--ink-4); }
 
-/* Progress indicator */
-.upload-progress-row {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 10px;
-}
-.upload-progress-label {
-  font-size: 12px; font-weight: 600; color: var(--ink-3);
-}
+.upload-progress-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
+.upload-progress-label { font-size: 12px; font-weight: 600; color: var(--ink-3); }
 .upload-progress-label span { color: var(--ink-2); font-weight: 700; }
-.upload-progress-dots {
-  display: flex; gap: 5px;
-}
-.upload-dot {
-  width: 8px; height: 8px; border-radius: 50%;
-  border: 1.5px solid var(--border);
-  background: transparent;
-  transition: background 0.2s, border-color 0.2s;
-}
+.upload-progress-dots { display: flex; gap: 5px; }
+.upload-dot { width: 8px; height: 8px; border-radius: 50%; border: 1.5px solid var(--border); background: transparent; transition: background 0.2s, border-color 0.2s; }
 .upload-dot.filled { background: var(--accent); border-color: var(--accent); }
 .upload-dot.main-dot { background: var(--accent); border-color: var(--accent); box-shadow: 0 0 0 2px rgba(59,127,236,0.2); }
 
-/* Image preview grid */
-.image-previews {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 8px;
-}
-.preview-slot {
-  aspect-ratio: 1;
-  border-radius: var(--r-sm);
-  border: 1.5px dashed var(--border);
-  background: var(--surface-3);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 4px;
-  color: var(--ink-4);
-  font-size: 10px;
-  font-weight: 600;
-  position: relative;
-  overflow: hidden;
-}
-.preview-slot-num {
-  font-size: 11px; font-weight: 700; color: var(--ink-4);
-}
-.preview-slot.has-image {
-  border-style: solid; border-color: var(--border);
-  background: var(--surface-3);
-  cursor: pointer;
-}
+.image-previews { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+.preview-slot { aspect-ratio: 1; border-radius: var(--r-sm); border: 1.5px dashed var(--border); background: var(--surface-3); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; color: var(--ink-4); font-size: 10px; font-weight: 600; position: relative; overflow: hidden; }
+.preview-slot-num { font-size: 11px; font-weight: 700; color: var(--ink-4); }
+.preview-slot.has-image { border-style: solid; border-color: var(--border); cursor: pointer; }
 .preview-slot.is-main { border-color: var(--accent); box-shadow: 0 0 0 2px rgba(59,127,236,0.18); }
-.preview-slot img {
-  position: absolute; inset: 0;
-  width: 100%; height: 100%; object-fit: cover; display: block;
-}
-.preview-main-badge {
-  position: absolute; bottom: 4px; left: 0; right: 0;
-  display: flex; justify-content: center;
-  pointer-events: none;
-}
-.preview-main-badge span {
-  background: var(--accent); color: #fff;
-  font-size: 8px; font-weight: 700;
-  padding: 2px 7px; border-radius: 4px;
-  text-transform: uppercase; letter-spacing: 0.5px;
-}
-.preview-remove-btn {
-  position: absolute; top: 4px; right: 4px;
-  width: 20px; height: 20px; border-radius: 50%;
-  background: rgba(14,17,23,0.65); border: none; cursor: pointer;
-  display: flex; align-items: center; justify-content: center;
-  opacity: 0; transition: opacity 0.15s;
-  backdrop-filter: blur(4px);
-}
+.preview-slot img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block; }
+.preview-main-badge { position: absolute; bottom: 4px; left: 0; right: 0; display: flex; justify-content: center; pointer-events: none; }
+.preview-main-badge span { background: var(--accent); color: #fff; font-size: 8px; font-weight: 700; padding: 2px 7px; border-radius: 4px; text-transform: uppercase; letter-spacing: 0.5px; }
+.preview-remove-btn { position: absolute; top: 4px; right: 4px; width: 20px; height: 20px; border-radius: 50%; background: rgba(14,17,23,0.65); border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; opacity: 0; transition: opacity 0.15s; backdrop-filter: blur(4px); }
 .preview-slot.has-image:hover .preview-remove-btn { opacity: 1; }
 .preview-remove-btn svg { width: 10px; height: 10px; color: #fff; }
 
-/* ============================================================
-   CATEGORY GRID — uniform square cards, icon + label vertical
-============================================================ */
-.category-grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 8px;
-}
-.cat-card {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 5px;
-  aspect-ratio: 1 / 1;
-  border: 1.5px solid var(--border);
-  border-radius: var(--r-md);
-  background: var(--surface);
-  cursor: pointer;
-  transition: border-color 0.14s, background 0.14s, box-shadow 0.14s;
-  user-select: none;
-  -webkit-tap-highlight-color: transparent;
-  padding: 6px 4px;
-  text-align: center;
-}
-.cat-card:hover:not(.selected) {
-  border-color: var(--accent);
-  background: var(--accent-light);
-}
-.cat-card.selected {
-  border-color: var(--accent);
-  background: var(--accent-light);
-  box-shadow: 0 0 0 3px rgba(59,127,236,0.14);
-}
-.cat-card-icon {
-  width: 28px; height: 28px;
-  display: flex; align-items: center; justify-content: center;
-  color: var(--ink-3);
-  transition: color 0.14s;
-  flex-shrink: 0;
-}
+/* CATEGORY GRID */
+.category-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+.cat-card { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 5px; aspect-ratio: 1/1; border: 1.5px solid var(--border); border-radius: var(--r-md); background: var(--surface); cursor: pointer; transition: border-color 0.14s, background 0.14s, box-shadow 0.14s; user-select: none; -webkit-tap-highlight-color: transparent; padding: 6px 4px; text-align: center; }
+.cat-card:hover:not(.selected) { border-color: var(--accent); background: var(--accent-light); }
+.cat-card.selected { border-color: var(--accent); background: var(--accent-light); box-shadow: 0 0 0 3px rgba(59,127,236,0.14); }
+.cat-card-icon { width: 28px; height: 28px; display: flex; align-items: center; justify-content: center; color: var(--ink-3); transition: color 0.14s; flex-shrink: 0; }
 .cat-card-icon svg { width: 22px; height: 22px; }
-.cat-card.selected .cat-card-icon,
-.cat-card:hover:not(.selected) .cat-card-icon { color: var(--accent-dark); }
-.cat-card-label {
-  font-size: 9.5px;
-  font-weight: 600;
-  color: var(--ink-2);
-  line-height: 1.2;
-  word-break: break-word;
-  max-width: 100%;
-}
+.cat-card.selected .cat-card-icon, .cat-card:hover:not(.selected) .cat-card-icon { color: var(--accent-dark); }
+.cat-card-label { font-size: 9.5px; font-weight: 600; color: var(--ink-2); line-height: 1.2; word-break: break-word; max-width: 100%; }
 .cat-card.selected .cat-card-label { color: var(--accent-dark); }
 
-/* ============================================================
-   SUBMIT SECTION
-============================================================ */
-.submit-section {
-  padding: 22px; border-top: 1px solid var(--border);
-  display: flex; flex-direction: column; gap: 12px;
-}
+/* SUBMIT SECTION */
+.submit-section { padding: 22px; border-top: 1px solid var(--border); display: flex; flex-direction: column; gap: 12px; }
 .submit-btn {
-  width: 100%; padding: 13px 24px;
-  border-radius: var(--r-md); border: none;
-  background: var(--accent); color: #fff;
-  font-family: var(--font); font-size: 15px; font-weight: 600;
-  cursor: pointer; display: flex; align-items: center; justify-content: center;
-  gap: 8px;
+  width: 100%; padding: 13px 24px; border-radius: var(--r-md); border: none;
+  background: var(--accent); color: #fff; font-family: var(--font); font-size: 15px; font-weight: 600;
+  cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px;
   transition: background 0.15s, transform 0.12s, box-shadow 0.15s;
-  box-shadow: 0 4px 14px rgba(59,127,236,0.28);
-  letter-spacing: -0.1px;
+  box-shadow: 0 4px 14px rgba(59,127,236,0.28); letter-spacing: -0.1px;
 }
-.submit-btn:hover:not(:disabled) {
-  background: var(--accent-dark);
-  transform: translateY(-1px);
-  box-shadow: 0 6px 20px rgba(59,127,236,0.32);
-}
+.submit-btn:hover:not(:disabled) { background: var(--accent-dark); transform: translateY(-1px); box-shadow: 0 6px 20px rgba(59,127,236,0.32); }
 .submit-btn:active:not(:disabled) { transform: translateY(0); }
 .submit-btn:disabled { opacity: 0.65; cursor: not-allowed; transform: none; }
-.spinner {
-  width: 17px; height: 17px;
-  border: 2px solid rgba(255,255,255,0.4);
-  border-top-color: #fff; border-radius: 50%;
-  animation: spin 0.65s linear infinite; flex-shrink: 0;
+
+.view-output-btn {
+  width: 100%; padding: 13px 24px; border-radius: var(--r-md);
+  border: 1.5px solid var(--accent); background: var(--accent-light);
+  color: var(--accent-dark); font-family: var(--font); font-size: 15px; font-weight: 600;
+  cursor: pointer; display: none; align-items: center; justify-content: center; gap: 8px;
+  transition: background 0.15s, border-color 0.15s;
 }
+.view-output-btn.visible { display: flex; }
+.view-output-btn:hover { background: var(--accent); color: #fff; }
+
+.spinner { width: 17px; height: 17px; border: 2px solid rgba(255,255,255,0.4); border-top-color: #fff; border-radius: 50%; animation: spin 0.65s linear infinite; flex-shrink: 0; }
 @keyframes spin { to { transform: rotate(360deg); } }
 
-.form-status {
-  display: none; padding: 12px 14px; border-radius: var(--r-sm);
-  font-size: 13px; font-weight: 500; align-items: center; gap: 10px; line-height: 1.4;
-}
+.form-status { display: none; padding: 12px 14px; border-radius: var(--r-sm); font-size: 13px; font-weight: 500; align-items: center; gap: 10px; line-height: 1.4; }
 .form-status.visible { display: flex; }
 .form-status.success { background: var(--success-light); border: 1px solid rgba(26,158,92,0.2); color: var(--success); }
-.form-status.error   { background: var(--danger-light);  border: 1px solid rgba(229,62,62,0.2);  color: var(--danger); }
-.form-status-icon {
-  width: 28px; height: 28px; border-radius: 50%;
-  display: flex; align-items: center; justify-content: center; flex-shrink: 0;
-}
+.form-status.error   { background: var(--danger-light); border: 1px solid rgba(229,62,62,0.2); color: var(--danger); }
+.form-status-icon { width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
 .form-status.success .form-status-icon { background: rgba(26,158,92,0.12); }
 .form-status.error   .form-status-icon { background: rgba(229,62,62,0.12); }
 .form-status-icon svg { width: 14px; height: 14px; }
@@ -395,23 +219,230 @@ body {
 .form-status-text span { font-size: 12px; opacity: 0.75; font-weight: 400; }
 
 /* ============================================================
+   PRODUCT PREVIEW PAGE
+============================================================ */
+#previewPage {
+  background: var(--surface-2);
+  min-height: 100dvh;
+}
+
+/* Preview top nav bar */
+.preview-navbar {
+  position: sticky; top: 0; z-index: 50;
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  display: flex; align-items: center; gap: 12px;
+  padding: 12px 16px;
+}
+.preview-back-btn {
+  width: 36px; height: 36px; border-radius: 50%;
+  border: 1.5px solid var(--border); background: var(--surface);
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; flex-shrink: 0;
+  transition: background 0.15s, border-color 0.15s;
+}
+.preview-back-btn:hover { background: var(--surface-2); border-color: var(--accent); }
+.preview-back-btn svg { width: 18px; height: 18px; color: var(--ink-2); }
+.preview-navbar-title { font-size: 15px; font-weight: 700; color: var(--ink); }
+.preview-navbar-badge {
+  margin-left: auto;
+  font-size: 11px; font-weight: 600;
+  padding: 3px 10px; border-radius: var(--r-sm);
+  background: #FEF3C7; color: #92400E;
+  border: 1px solid #FDE68A;
+}
+
+/* Preview inner content */
+.preview-content {
+  max-width: 560px;
+  margin: 0 auto;
+  padding: 0 0 60px;
+}
+
+/* Loading state inside preview */
+.preview-loading {
+  display: flex; flex-direction: column; align-items: center;
+  justify-content: center; padding: 80px 24px; gap: 16px;
+}
+.preview-loading-spinner {
+  width: 36px; height: 36px;
+  border: 3px solid var(--border);
+  border-top-color: var(--accent);
+  border-radius: 50%;
+  animation: spin 0.65s linear infinite;
+}
+.preview-loading-text { font-size: 14px; color: var(--ink-3); font-weight: 500; }
+
+/* Empty state */
+.preview-empty {
+  display: flex; flex-direction: column; align-items: center;
+  padding: 60px 24px; text-align: center; gap: 12px;
+}
+.preview-empty-icon { width: 56px; height: 56px; border-radius: var(--r-lg); background: var(--surface-3); display: flex; align-items: center; justify-content: center; }
+.preview-empty-icon svg { width: 28px; height: 28px; color: var(--ink-4); }
+.preview-empty-title { font-size: 16px; font-weight: 700; color: var(--ink-2); }
+.preview-empty-sub { font-size: 13px; color: var(--ink-3); max-width: 260px; line-height: 1.5; }
+
+/* ── 1. BREADCRUMB ── */
+.pd-breadcrumb {
+  padding: 14px 16px 0;
+  font-size: 11px; color: var(--ink-4); font-weight: 500;
+  display: flex; align-items: center; gap: 5px; flex-wrap: wrap;
+}
+.pd-breadcrumb-sep { color: var(--border); }
+.pd-breadcrumb span:last-child { color: var(--ink-3); }
+
+/* ── 2. TITLE ── */
+.pd-title {
+  padding: 10px 16px 4px;
+  font-size: 18px; font-weight: 700; color: var(--ink);
+  line-height: 1.3; letter-spacing: -0.3px;
+}
+
+/* ── 3. BRAND ── */
+.pd-brand {
+  padding: 0 16px 12px;
+  font-size: 13px;
+}
+.pd-brand-label { color: var(--ink-4); }
+.pd-brand-value { color: var(--accent); font-weight: 600; cursor: pointer; }
+.pd-brand-value:hover { text-decoration: underline; }
+
+/* ── 4. IMAGE SECTION ── */
+.pd-images-section { background: var(--surface); }
+.pd-main-img-wrap {
+  position: relative; width: 100%;
+  aspect-ratio: 1/1; overflow: hidden;
+  background: var(--surface-3);
+  display: flex; align-items: center; justify-content: center;
+}
+.pd-main-img {
+  width: 100%; height: 100%;
+  object-fit: contain;
+  display: block;
+  transition: opacity 0.22s ease;
+}
+.pd-main-img.fade { opacity: 0; }
+.pd-main-img-placeholder {
+  display: flex; flex-direction: column; align-items: center; gap: 8px;
+}
+.pd-main-img-placeholder svg { width: 48px; height: 48px; color: var(--ink-4); }
+.pd-main-img-placeholder span { font-size: 13px; color: var(--ink-4); }
+
+.pd-thumbnails {
+  display: flex; gap: 10px;
+  padding: 12px 16px;
+  overflow-x: auto; scrollbar-width: none;
+}
+.pd-thumbnails::-webkit-scrollbar { display: none; }
+.pd-thumb {
+  width: 60px; height: 60px; flex-shrink: 0;
+  border-radius: var(--r-sm); overflow: hidden;
+  border: 2px solid transparent;
+  cursor: pointer; transition: border-color 0.15s;
+  background: var(--surface-3);
+}
+.pd-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.pd-thumb.active { border-color: var(--accent); }
+.pd-thumb:hover { border-color: var(--ink-4); }
+
+/* ── 5. PRICE ── */
+.pd-price-block {
+  padding: 14px 16px;
+  background: var(--surface);
+  border-top: 1px solid var(--border);
+  display: flex; align-items: baseline; gap: 6px;
+}
+.pd-price-label { font-size: 12px; color: var(--ink-4); font-weight: 500; }
+.pd-price-value { font-size: 22px; font-weight: 800; color: var(--ink); letter-spacing: -0.5px; }
+
+/* ── ACCORDION SECTIONS ── */
+.pd-accordion {
+  background: var(--surface);
+  margin-top: 8px;
+}
+.pd-accordion-item { border-bottom: 1px solid var(--border-light, #F1F3F5); }
+.pd-accordion-item:last-child { border-bottom: none; }
+.pd-accordion-trigger {
+  width: 100%; padding: 15px 16px;
+  display: flex; align-items: center; justify-content: space-between;
+  cursor: pointer; background: none; border: none;
+  font-family: var(--font); text-align: left;
+  -webkit-tap-highlight-color: transparent;
+}
+.pd-accordion-trigger-label {
+  font-size: 14px; font-weight: 700; color: var(--ink);
+}
+.pd-accordion-chevron {
+  width: 20px; height: 20px; flex-shrink: 0;
+  color: var(--ink-4); transition: transform 0.22s;
+}
+.pd-accordion-item.open .pd-accordion-chevron { transform: rotate(180deg); }
+.pd-accordion-body {
+  display: none; padding: 0 16px 16px;
+}
+.pd-accordion-item.open .pd-accordion-body { display: block; }
+
+/* ── 6. DESCRIPTION ── */
+.pd-description-text {
+  font-size: 14px; color: var(--ink-2); line-height: 1.7;
+  white-space: pre-wrap;
+}
+
+/* ── 7. KEY HIGHLIGHTS ── */
+.pd-highlights-list { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+.pd-highlights-list li {
+  display: flex; align-items: flex-start; gap: 10px;
+  font-size: 13px; color: var(--ink-2); line-height: 1.5;
+}
+.pd-highlight-dot {
+  width: 7px; height: 7px; border-radius: 50%;
+  background: var(--accent); flex-shrink: 0; margin-top: 5px;
+}
+
+/* ── 8. SPECIFICATIONS ── */
+.pd-spec-table { width: 100%; border-collapse: collapse; }
+.pd-spec-table tr { border-bottom: 1px solid var(--surface-3); }
+.pd-spec-table tr:last-child { border-bottom: none; }
+.pd-spec-table td { padding: 9px 0; font-size: 13px; vertical-align: top; }
+.pd-spec-table td:first-child { color: var(--ink-4); font-weight: 500; width: 40%; padding-right: 12px; }
+.pd-spec-table td:last-child { color: var(--ink-2); font-weight: 500; }
+
+/* ── 9. OTHER DETAILS ── */
+.pd-other-detail { display: flex; gap: 8px; margin-bottom: 10px; font-size: 13px; }
+.pd-other-detail:last-child { margin-bottom: 0; }
+.pd-other-detail-label { color: var(--ink-4); font-weight: 500; min-width: 110px; flex-shrink: 0; }
+.pd-other-detail-value { color: var(--ink-2); font-weight: 500; }
+.pd-keywords-wrap { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 4px; }
+.pd-keyword-chip {
+  padding: 3px 10px;
+  border: 1px solid var(--border);
+  border-radius: var(--r-pill, 999px);
+  font-size: 11px; font-weight: 500; color: var(--ink-2);
+  background: var(--surface-2);
+}
+
+/* ============================================================
    RESPONSIVE
 ============================================================ */
 @media (max-width: 360px) {
   .category-grid { grid-template-columns: repeat(3, 1fr); }
-  .image-previews { grid-template-columns: repeat(4, 1fr); }
 }
 @media (min-width: 560px) {
   .page-wrapper { padding: 40px 24px 80px; }
+  .pd-main-img-wrap { max-height: 480px; }
 }
 </style>
 </head>
 <body>
 
+<!-- ============================================================
+     PAGE 1 — PRODUCT FORM
+============================================================ -->
+<div id="formPage" class="page-section active">
 <div class="page-wrapper">
 <div class="form-shell">
 
-  <!-- Page header -->
   <div class="page-header">
     <div class="page-header-icon">
       <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
@@ -430,51 +461,36 @@ body {
   <div class="form-card">
   <form id="productForm" novalidate>
 
-    <!-- ===================================================
-         1. PRODUCT IMAGES
-    =================================================== -->
+    <!-- 1. IMAGES -->
     <div class="form-section">
       <div class="field-wrapper" id="imagesFieldWrapper">
         <label class="field-label field-label-required">Product Images</label>
         <p style="font-size:12px;color:var(--ink-4);margin-bottom:12px;line-height:1.5;">
-          All 4 images are required. First image is always the <strong style="color:var(--ink-2);">main / front image</strong>. Tap a filled slot to remove it.
+          All 4 images are required. First image is always the <strong style="color:var(--ink-2);">main / front image</strong>. Hover a filled slot to remove it.
         </p>
-
-        <!-- Progress dots -->
         <div class="upload-progress-row">
           <div class="upload-progress-label"><span id="imageCountLabel">0</span> / 4 images added</div>
-          <div class="upload-progress-dots" id="progressDots">
+          <div class="upload-progress-dots">
             <div class="upload-dot" id="dot-0"></div>
             <div class="upload-dot" id="dot-1"></div>
             <div class="upload-dot" id="dot-2"></div>
             <div class="upload-dot" id="dot-3"></div>
           </div>
         </div>
-
-        <!-- Preview slots (always visible) -->
-        <div class="image-previews" id="imagePreviews">
-          <!-- Rendered by JS -->
-        </div>
-
-        <!-- Upload buttons row -->
+        <div class="image-previews" id="imagePreviews"></div>
         <div class="upload-buttons-row" style="margin-top:12px;">
-          <!-- Gallery / file picker -->
           <div class="upload-btn" id="galleryBtn">
             <input type="file" id="galleryInput" accept="image/*" multiple aria-label="Upload from gallery"/>
             <div class="upload-btn-icon">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                <rect x="3" y="3" width="18" height="18" rx="2"/>
-                <path d="M3 15l5-5 4 4 3-3 6 6"/>
-                <circle cx="8.5" cy="8.5" r="1.5"/>
+                <rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 15l5-5 4 4 3-3 6 6"/><circle cx="8.5" cy="8.5" r="1.5"/>
               </svg>
             </div>
             <div class="upload-btn-label">Upload from Gallery</div>
             <div class="upload-btn-sub">JPG, PNG, WEBP</div>
           </div>
-
-          <!-- Camera -->
           <div class="upload-btn" id="cameraBtn">
-            <input type="file" id="cameraInput" accept="image/*" capture="environment" aria-label="Take photo with camera"/>
+            <input type="file" id="cameraInput" accept="image/*" capture="environment" aria-label="Take photo"/>
             <div class="upload-btn-icon">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
                 <path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z"/>
@@ -482,10 +498,9 @@ body {
               </svg>
             </div>
             <div class="upload-btn-label">Open Camera</div>
-            <div class="upload-btn-sub">Click &amp; capture directly</div>
+            <div class="upload-btn-sub">Click &amp; capture</div>
           </div>
         </div>
-
         <div class="field-error" id="imagesError">
           <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><circle cx="6" cy="6" r="5" stroke="currentColor" stroke-width="1.4"/><path d="M6 3.5v3M6 8.5v.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
           All 4 product images are required before submitting.
@@ -495,14 +510,11 @@ body {
 
     <div class="form-divider"></div>
 
-    <!-- ===================================================
-         2. PRODUCT TITLE
-    =================================================== -->
+    <!-- 2. TITLE -->
     <div class="form-section">
       <div class="field-wrapper" id="titleFieldWrapper">
         <label class="field-label field-label-required" for="productTitle">Product Title</label>
-        <input type="text" id="productTitle" name="title" class="field-input"
-               placeholder="Enter product title" maxlength="120" autocomplete="off"/>
+        <input type="text" id="productTitle" name="title" class="field-input" placeholder="Enter product title" maxlength="120" autocomplete="off"/>
         <div class="field-error" id="titleError">
           <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><circle cx="6" cy="6" r="5" stroke="currentColor" stroke-width="1.4"/><path d="M6 3.5v3M6 8.5v.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
           Product title is required.
@@ -512,15 +524,11 @@ body {
 
     <div class="form-divider"></div>
 
-    <!-- ===================================================
-         3. CATEGORY
-    =================================================== -->
+    <!-- 3. CATEGORY -->
     <div class="form-section">
       <div class="field-wrapper" id="categoryFieldWrapper">
         <label class="field-label field-label-required">Category</label>
-        <div class="category-grid" id="categoryGrid" role="radiogroup" aria-label="Product category">
-          <!-- Injected by JS -->
-        </div>
+        <div class="category-grid" id="categoryGrid" role="radiogroup" aria-label="Product category"></div>
         <input type="hidden" id="selectedCategory" name="category"/>
         <div class="field-error" id="categoryError">
           <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><circle cx="6" cy="6" r="5" stroke="currentColor" stroke-width="1.4"/><path d="M6 3.5v3M6 8.5v.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
@@ -531,27 +539,21 @@ body {
 
     <div class="form-divider"></div>
 
-    <!-- ===================================================
-         4. BRAND NAME
-    =================================================== -->
+    <!-- 4. BRAND -->
     <div class="form-section">
       <label class="field-label" for="brandName">Brand Name</label>
-      <input type="text" id="brandName" name="brand" class="field-input"
-             placeholder="Enter brand name (if applicable)" maxlength="80" autocomplete="off"/>
+      <input type="text" id="brandName" name="brand" class="field-input" placeholder="Enter brand name (if applicable)" maxlength="80" autocomplete="off"/>
     </div>
 
     <div class="form-divider"></div>
 
-    <!-- ===================================================
-         5. MRP
-    =================================================== -->
+    <!-- 5. MRP -->
     <div class="form-section">
       <div class="field-wrapper" id="mrpFieldWrapper">
         <label class="field-label field-label-required" for="mrpInput">MRP</label>
         <div class="price-wrap">
           <div class="price-prefix" aria-hidden="true">₹</div>
-          <input type="number" id="mrpInput" name="mrp" class="price-input"
-                 placeholder="0.00" min="1" step="0.01" inputmode="decimal"/>
+          <input type="number" id="mrpInput" name="mrp" class="price-input" placeholder="0.00" min="1" step="0.01" inputmode="decimal"/>
         </div>
         <div class="field-error" id="mrpError">
           <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><circle cx="6" cy="6" r="5" stroke="currentColor" stroke-width="1.4"/><path d="M6 3.5v3M6 8.5v.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
@@ -562,9 +564,7 @@ body {
 
     <div class="form-divider"></div>
 
-    <!-- ===================================================
-         SUBMIT
-    =================================================== -->
+    <!-- SUBMIT -->
     <div class="submit-section">
       <div class="form-status" id="formStatus" role="alert" aria-live="polite">
         <div class="form-status-icon" id="statusIcon"></div>
@@ -576,155 +576,81 @@ body {
         </svg>
         <span id="submitLabel">Submit Product</span>
       </button>
+      <!-- View Output button — shown after successful submit -->
+      <button type="button" class="view-output-btn" id="viewOutputBtn" onclick="openPreviewPage()">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7z"/>
+          <circle cx="12" cy="12" r="3"/>
+        </svg>
+        View Output
+      </button>
     </div>
 
   </form>
-  </div><!-- /form-card -->
+  </div>
 </div><!-- /form-shell -->
 </div><!-- /page-wrapper -->
+</div><!-- /formPage -->
 
 
+<!-- ============================================================
+     PAGE 2 — PRODUCT PREVIEW
+============================================================ -->
+<div id="previewPage" class="page-section">
 
+  <!-- Sticky navbar -->
+  <div class="preview-navbar">
+    <button class="preview-back-btn" onclick="closePreviewPage()" aria-label="Go back">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M19 12H5M12 5l-7 7 7 7"/>
+      </svg>
+    </button>
+    <span class="preview-navbar-title">Product Preview</span>
+    <span class="preview-navbar-badge">AI Generated</span>
+  </div>
 
+  <div class="preview-content" id="previewContent">
+    <!-- Populated dynamically -->
+  </div>
 
-
+</div><!-- /previewPage -->
 
 
 <script>
-
-
-
+/* ============================================================
+   SUPABASE CONFIG
+============================================================ */
+const SUPABASE_URL = "https://gkbwrjkyhaywquivadey.supabase.co";
+const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdrYndyamt5aGF5d3F1aXZhZGV5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzkwODM3MDYsImV4cCI6MjA5NDY1OTcwNn0.U0vpLnQjSaHoV2Tys8ULjjQ2UnmAl6-KSI_so2COcCE";
 
 /* ============================================================
-   CONFIG
+   FORM CONFIG & STATE
 ============================================================ */
+const MAX_IMAGES = 4;
+let lastDraftProductId = null; // stored after successful submission
 
-const MAX_IMAGES   = 4;
-
-/* Category data — label + outlined SVG path(s) */
-const CATEGORIES = [
-  {
-    id: "medicine",
-    label: "Medicine",
-    svg: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
-      <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/>
-      <path d="M12 5 9.04 7.96l2.08 2.08 2.08-2.08L12 5Z"/>
-    </svg>`
-  },
-  {
-    id: "groceries",
-    label: "Groceries",
-    svg: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
-      <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/>
-      <line x1="3" y1="6" x2="21" y2="6"/>
-      <path d="M16 10a4 4 0 0 1-8 0"/>
-    </svg>`
-  },
-  {
-    id: "fashion",
-    label: "Fashion",
-    svg: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
-      <path d="M20.38 3.46 16 2a4 4 0 0 1-8 0L3.62 3.46a2 2 0 0 0-1.34 2.23l.58 3.57a1 1 0 0 0 .99.84H6v10c0 1.1.9 2 2 2h8a2 2 0 0 0 2-2V10h2.15a1 1 0 0 0 .99-.84l.58-3.57a2 2 0 0 0-1.34-2.23z"/>
-    </svg>`
-  },
-  {
-    id: "sports",
-    label: "Sports & Fitness",
-    svg: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
-      <circle cx="12" cy="12" r="10"/>
-      <path d="M4.93 4.93l4.24 4.24"/>
-      <path d="M14.83 9.17l4.24-4.24"/>
-      <path d="M14.83 14.83l4.24 4.24"/>
-      <path d="M9.17 14.83l-4.24 4.24"/>
-      <circle cx="12" cy="12" r="4"/>
-    </svg>`
-  },
-  {
-    id: "pet",
-    label: "Pet Supplies",
-    svg: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
-      <path d="M10 5.172C10 3.782 8.423 2.679 6.5 3c-2.823.47-4.113 6.006-4 7 .08.703 1.725 1.722 3.656 1 1.261-.472 1.96-1.45 2.344-2.5"/>
-      <path d="M14.267 5.172c0-1.39 1.577-2.493 3.5-2.172 2.823.47 4.113 6.006 4 7-.08.703-1.725 1.722-3.656 1-1.261-.472-1.855-1.45-2.239-2.5"/>
-      <path d="M8 14v.5"/>
-      <path d="M16 14v.5"/>
-      <path d="M11.25 16.25h1.5L12 17l-.75-.75z"/>
-      <path d="M4.42 11.247A13.152 13.152 0 0 0 4 14.556C4 18.728 7.582 21 12 21s8-2.272 8-6.444c0-1.061-.162-2.2-.493-3.309m-9.243-6.082A8.801 8.801 0 0 1 12 5c.78 0 1.5.108 2.161.306"/>
-    </svg>`
-  },
-  {
-    id: "music",
-    label: "Musical Instruments",
-    svg: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
-      <path d="M9 18V5l12-2v13"/>
-      <circle cx="6" cy="18" r="3"/>
-      <circle cx="18" cy="16" r="3"/>
-    </svg>`
-  },
-  {
-    id: "beauty",
-    label: "Beauty & Care",
-    svg: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
-      <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
-      <line x1="12" y1="8" x2="12" y2="12"/>
-      <line x1="10" y1="10" x2="14" y2="10"/>
-    </svg>`
-  },
-  {
-    id: "gifts",
-    label: "Gift & Toys",
-    svg: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
-      <polyline points="20 12 20 22 4 22 4 12"/>
-      <rect x="2" y="7" width="20" height="5"/>
-      <line x1="12" y1="22" x2="12" y2="7"/>
-      <path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"/>
-      <path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"/>
-    </svg>`
-  },
-  {
-    id: "books",
-    label: "Books & Stationery",
-    svg: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
-      <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/>
-      <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/>
-    </svg>`
-  },
-  {
-    id: "appliances",
-    label: "Appliances",
-    svg: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
-      <rect x="3" y="2" width="7" height="20"/>
-      <rect x="14" y="2" width="7" height="20"/>
-      <line x1="10" y1="7" x2="14" y2="7"/>
-      <line x1="10" y1="17" x2="14" y2="17"/>
-    </svg>`
-  },
-  {
-    id: "electronics",
-    label: "Electronics",
-    svg: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
-      <rect x="2" y="7" width="20" height="14" rx="2"/>
-      <path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/>
-      <line x1="12" y1="12" x2="12.01" y2="12"/>
-    </svg>`
-  },
-  {
-    id: "others",
-    label: "Others / Mixed",
-    svg: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
-      <circle cx="12" cy="12" r="10"/>
-      <line x1="12" y1="8" x2="12" y2="12"/>
-      <line x1="12" y1="16" x2="12.01" y2="16"/>
-    </svg>`
-  },
-];
-
-/* ============================================================
-   STATE
-============================================================ */
 const state = {
-  images:   [],   // Array of { file, dataUrl } — index 0 is always main
+  images:   [],
   category: "",
 };
+
+/* ============================================================
+   CATEGORY DATA
+============================================================ */
+const CATEGORIES = [
+  { id:"medicine",     label:"Medicine",           svg:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>` },
+  { id:"groceries",    label:"Groceries",          svg:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>` },
+  { id:"fashion",      label:"Fashion",            svg:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M20.38 3.46 16 2a4 4 0 0 1-8 0L3.62 3.46a2 2 0 0 0-1.34 2.23l.58 3.57a1 1 0 0 0 .99.84H6v10c0 1.1.9 2 2 2h8a2 2 0 0 0 2-2V10h2.15a1 1 0 0 0 .99-.84l.58-3.57a2 2 0 0 0-1.34-2.23z"/></svg>` },
+  { id:"sports",       label:"Sports & Fitness",   svg:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M4.93 4.93l4.24 4.24M14.83 9.17l4.24-4.24M14.83 14.83l4.24 4.24M9.17 14.83l-4.24 4.24"/><circle cx="12" cy="12" r="4"/></svg>` },
+  { id:"pet",          label:"Pet Supplies",       svg:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M10 5.172C10 3.782 8.423 2.679 6.5 3c-2.823.47-4.113 6.006-4 7 .08.703 1.725 1.722 3.656 1 1.261-.472 1.96-1.45 2.344-2.5"/><path d="M14.267 5.172c0-1.39 1.577-2.493 3.5-2.172 2.823.47 4.113 6.006 4 7-.08.703-1.725 1.722-3.656 1-1.261-.472-1.855-1.45-2.239-2.5"/><path d="M4.42 11.247A13.152 13.152 0 0 0 4 14.556C4 18.728 7.582 21 12 21s8-2.272 8-6.444c0-1.061-.162-2.2-.493-3.309"/></svg>` },
+  { id:"music",        label:"Musical Instruments",svg:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>` },
+  { id:"beauty",       label:"Beauty & Care",      svg:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>` },
+  { id:"gifts",        label:"Gift & Toys",        svg:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 12 20 22 4 22 4 12"/><rect x="2" y="7" width="20" height="5"/><line x1="12" y1="22" x2="12" y2="7"/><path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"/><path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"/></svg>` },
+  { id:"books",        label:"Books & Stationery", svg:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>` },
+  { id:"appliances",   label:"Appliances",         svg:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="2" width="7" height="20"/><rect x="14" y="2" width="7" height="20"/><line x1="10" y1="7" x2="14" y2="7"/><line x1="10" y1="17" x2="14" y2="17"/></svg>` },
+  { id:"electronics",  label:"Electronics",        svg:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/><line x1="12" y1="12" x2="12.01" y2="12"/></svg>` },
+  { id:"others",       label:"Others / Mixed",     svg:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>` },
+];
 
 /* ============================================================
    DOM REFS
@@ -746,18 +672,34 @@ const submitLabel         = document.getElementById("submitLabel");
 const formStatus          = document.getElementById("formStatus");
 const statusIcon          = document.getElementById("statusIcon");
 const statusText          = document.getElementById("statusText");
+const viewOutputBtn       = document.getElementById("viewOutputBtn");
 
 /* ============================================================
-   CATEGORY CARDS — RENDER
+   PAGE SWITCHING
+============================================================ */
+function openPreviewPage() {
+  document.getElementById("formPage").classList.remove("active");
+  document.getElementById("previewPage").classList.add("active");
+  window.scrollTo({ top: 0, behavior: "instant" });
+  loadProductPreview();
+}
+
+function closePreviewPage() {
+  document.getElementById("previewPage").classList.remove("active");
+  document.getElementById("formPage").classList.add("active");
+  window.scrollTo({ top: 0, behavior: "instant" });
+}
+
+/* ============================================================
+   CATEGORY RENDER
 ============================================================ */
 function renderCategories() {
-  categoryGrid.innerHTML = CATEGORIES.map((cat) => `
-    <div class="cat-card" role="radio" aria-checked="false" tabindex="0" data-id="${escAttr(cat.id)}">
+  categoryGrid.innerHTML = CATEGORIES.map((cat) =>
+    `<div class="cat-card" role="radio" aria-checked="false" tabindex="0" data-id="${escAttr(cat.id)}">
       <div class="cat-card-icon">${cat.svg}</div>
       <div class="cat-card-label">${escHtml(cat.label)}</div>
-    </div>
-  `).join("");
-
+    </div>`
+  ).join("");
   categoryGrid.querySelectorAll(".cat-card").forEach((card) => {
     card.addEventListener("click", () => selectCategory(card));
     card.addEventListener("keydown", (e) => {
@@ -767,54 +709,37 @@ function renderCategories() {
 }
 
 function selectCategory(card) {
-  categoryGrid.querySelectorAll(".cat-card").forEach((c) => {
-    c.classList.remove("selected");
-    c.setAttribute("aria-checked", "false");
-  });
+  categoryGrid.querySelectorAll(".cat-card").forEach((c) => { c.classList.remove("selected"); c.setAttribute("aria-checked","false"); });
   card.classList.add("selected");
-  card.setAttribute("aria-checked", "true");
+  card.setAttribute("aria-checked","true");
   state.category = card.dataset.id;
   selectedCategoryInp.value = state.category;
-  clearError("categoryFieldWrapper", "categoryError");
+  clearError("categoryFieldWrapper","categoryError");
 }
 
 /* ============================================================
    IMAGE HANDLING
 ============================================================ */
-galleryInput.addEventListener("change", (e) => {
-  handleFiles(Array.from(e.target.files));
-  galleryInput.value = "";
-});
+galleryInput.addEventListener("change", (e) => { handleFiles(Array.from(e.target.files)); galleryInput.value = ""; });
+cameraInput.addEventListener("change",  (e) => { handleFiles(Array.from(e.target.files)); cameraInput.value  = ""; });
 
-cameraInput.addEventListener("change", (e) => {
-  handleFiles(Array.from(e.target.files));
-  cameraInput.value = "";
-});
-
-/* Drag and drop on the preview area */
 imagePreviews.addEventListener("dragover", (e) => e.preventDefault());
-imagePreviews.addEventListener("drop", (e) => {
+imagePreviews.addEventListener("drop",     (e) => {
   e.preventDefault();
-  const files = Array.from(e.dataTransfer.files).filter((f) => f.type.startsWith("image/"));
-  handleFiles(files);
+  handleFiles(Array.from(e.dataTransfer.files).filter(f => f.type.startsWith("image/")));
 });
 
 function handleFiles(files) {
   const remaining = MAX_IMAGES - state.images.length;
-  if (remaining <= 0) { alert("You've already added 4 images. Remove one to replace it."); return; }
-  const toProcess = files.slice(0, remaining);
-  toProcess.forEach((file) => {
+  if (remaining <= 0) { alert("4 images already added. Remove one first."); return; }
+  files.slice(0, remaining).forEach((file) => {
     if (!file.type.startsWith("image/")) return;
     const reader = new FileReader();
-    reader.onload = async (e) => {
-state.images.push({
-  file,
-  dataUrl: e.target.result
-});
-
-  renderPreviews();
-  clearError("imagesFieldWrapper", "imagesError");
-};
+    reader.onload = (e) => {
+      state.images.push({ file, dataUrl: e.target.result });
+      renderPreviews();
+      clearError("imagesFieldWrapper","imagesError");
+    };
     reader.readAsDataURL(file);
   });
 }
@@ -824,7 +749,6 @@ function removeImage(index) {
   renderPreviews();
 }
 
-/* Update upload button availability */
 function updateUploadButtons() {
   const full = state.images.length >= MAX_IMAGES;
   [galleryBtn, cameraBtn].forEach((btn) => {
@@ -833,32 +757,22 @@ function updateUploadButtons() {
     const inp = btn.querySelector("input");
     if (inp) inp.disabled = full;
   });
-  if (full) {
-    galleryBtn.querySelector(".upload-btn-sub").textContent = "Maximum reached";
-    cameraBtn.querySelector(".upload-btn-sub").textContent  = "Maximum reached";
-  } else {
-    galleryBtn.querySelector(".upload-btn-sub").textContent = "JPG, PNG, WEBP";
-    cameraBtn.querySelector(".upload-btn-sub").textContent  = "Click & capture directly";
-  }
+  galleryBtn.querySelector(".upload-btn-sub").textContent = full ? "Maximum reached" : "JPG, PNG, WEBP";
+  cameraBtn.querySelector(".upload-btn-sub").textContent  = full ? "Maximum reached" : "Click & capture";
 }
 
-/* Render the 4 fixed preview slots */
 function renderPreviews() {
   imagePreviews.innerHTML = "";
-
   for (let i = 0; i < MAX_IMAGES; i++) {
-    const img = state.images[i];
+    const img  = state.images[i];
     const slot = document.createElement("div");
     slot.className = "preview-slot" + (img ? " has-image" : "") + (i === 0 && img ? " is-main" : "");
 
     if (img) {
-      /* Filled slot */
       const imgEl = document.createElement("img");
-      imgEl.src = img.dataUrl;
-      imgEl.alt = `Product image ${i + 1}`;
+      imgEl.src = img.dataUrl; imgEl.alt = `Product image ${i + 1}`;
       slot.appendChild(imgEl);
 
-      /* Main badge for slot 0 */
       if (i === 0) {
         const badge = document.createElement("div");
         badge.className = "preview-main-badge";
@@ -866,123 +780,115 @@ function renderPreviews() {
         slot.appendChild(badge);
       }
 
-      /* Remove button */
-      const removeBtn = document.createElement("button");
-      removeBtn.type = "button";
-      removeBtn.className = "preview-remove-btn";
-      removeBtn.setAttribute("aria-label", `Remove image ${i + 1}`);
-      removeBtn.innerHTML = `<svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M1 1l10 10M11 1L1 11"/></svg>`;
-      removeBtn.addEventListener("click", (e) => { e.stopPropagation(); removeImage(i); });
-      slot.appendChild(removeBtn);
-
+      const rmBtn = document.createElement("button");
+      rmBtn.type = "button"; rmBtn.className = "preview-remove-btn";
+      rmBtn.setAttribute("aria-label", `Remove image ${i+1}`);
+      rmBtn.innerHTML = `<svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M1 1l10 10M11 1L1 11"/></svg>`;
+      rmBtn.addEventListener("click", (e) => { e.stopPropagation(); removeImage(i); });
+      slot.appendChild(rmBtn);
     } else {
-      /* Empty slot */
-      const num = document.createElement("div");
-      num.className = "preview-slot-num";
-      num.textContent = i === 0 ? "Main" : `${i + 1}`;
-      const lbl = document.createElement("div");
-      lbl.style.cssText = "font-size:9px;color:var(--ink-4);";
-      lbl.textContent = "Empty";
-      slot.appendChild(num);
-      slot.appendChild(lbl);
+      const num = document.createElement("div"); num.className = "preview-slot-num"; num.textContent = i === 0 ? "Main" : `${i+1}`;
+      const lbl = document.createElement("div"); lbl.style.cssText = "font-size:9px;color:var(--ink-4);"; lbl.textContent = "Empty";
+      slot.appendChild(num); slot.appendChild(lbl);
     }
-
     imagePreviews.appendChild(slot);
   }
 
-  /* Update count label & progress dots */
   const count = state.images.length;
   imageCountLabel.textContent = count;
-
   for (let i = 0; i < MAX_IMAGES; i++) {
     const dot = document.getElementById(`dot-${i}`);
     if (!dot) continue;
     dot.className = "upload-dot";
     if (i < count) dot.classList.add(i === 0 ? "main-dot" : "filled");
   }
-
   updateUploadButtons();
 }
 
 /* ============================================================
    VALIDATION
 ============================================================ */
-function showError(wrapperId, errorId) {
-  document.getElementById(wrapperId).classList.add("has-error");
-  document.getElementById(errorId).classList.add("visible");
-}
-function clearError(wrapperId, errorId) {
-  document.getElementById(wrapperId).classList.remove("has-error");
-  document.getElementById(errorId).classList.remove("visible");
-}
+function showError(wrapperId, errorId) { document.getElementById(wrapperId).classList.add("has-error"); document.getElementById(errorId).classList.add("visible"); }
+function clearError(wrapperId, errorId) { document.getElementById(wrapperId).classList.remove("has-error"); document.getElementById(errorId).classList.remove("visible"); }
 
 function validateForm() {
   let valid = true;
-
-  /* All 4 images required */
-  if (state.images.length < MAX_IMAGES) {
-    showError("imagesFieldWrapper", "imagesError");
-    valid = false;
-  } else {
-    clearError("imagesFieldWrapper", "imagesError");
-  }
-
-  /* Title */
-  if (!productTitle.value.trim()) {
-    showError("titleFieldWrapper", "titleError");
-    valid = false;
-  } else {
-    clearError("titleFieldWrapper", "titleError");
-  }
-
-  /* Category */
-  if (!state.category) {
-    showError("categoryFieldWrapper", "categoryError");
-    valid = false;
-  } else {
-    clearError("categoryFieldWrapper", "categoryError");
-  }
-
-  /* MRP */
+  if (state.images.length < MAX_IMAGES) { showError("imagesFieldWrapper","imagesError"); valid = false; } else clearError("imagesFieldWrapper","imagesError");
+  if (!productTitle.value.trim())        { showError("titleFieldWrapper","titleError");   valid = false; } else clearError("titleFieldWrapper","titleError");
+  if (!state.category)                   { showError("categoryFieldWrapper","categoryError"); valid = false; } else clearError("categoryFieldWrapper","categoryError");
   const mrpVal = parseFloat(mrpInput.value);
-  if (!mrpInput.value || isNaN(mrpVal) || mrpVal <= 0) {
-    showError("mrpFieldWrapper", "mrpError");
-    valid = false;
-  } else {
-    clearError("mrpFieldWrapper", "mrpError");
-  }
-
+  if (!mrpInput.value || isNaN(mrpVal) || mrpVal <= 0) { showError("mrpFieldWrapper","mrpError"); valid = false; } else clearError("mrpFieldWrapper","mrpError");
   return valid;
 }
 
-/* Clear errors on input */
-productTitle.addEventListener("input", () => clearError("titleFieldWrapper", "titleError"));
-mrpInput.addEventListener("input", () => clearError("mrpFieldWrapper", "mrpError"));
+productTitle.addEventListener("input", () => clearError("titleFieldWrapper","titleError"));
+mrpInput.addEventListener("input",    () => clearError("mrpFieldWrapper","mrpError"));
 
-
-
-
-
-   
 /* ============================================================
-   BUILD PAYLOAD
+   IMAGE PROCESSING HELPERS
 ============================================================ */
-function buildPayload() {
-  return {
-    title:    productTitle.value.trim(),
-    category: state.category,
-    brand:    brandName.value.trim() || null,
-    mrp:      parseFloat(mrpInput.value),
-    images: state.images.map(({ dataUrl }, i) => ({
-  dataUrl,
-  isMain: i === 0
-})),
-    mainImageIndex: 0,
-  };
+async function compressImage(file) {
+  return new Promise((resolve) => {
+    const img = new Image(); const reader = new FileReader();
+    reader.onload = (e) => { img.src = e.target.result; };
+    img.onload = () => {
+      const canvas = document.createElement("canvas"); const ctx = canvas.getContext("2d");
+      const MAX_WIDTH = 600; const scale = Math.min(MAX_WIDTH / img.width, 1);
+      canvas.width = img.width * scale; canvas.height = img.height * scale;
+      ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+      resolve(canvas.toDataURL("image/jpeg", 0.6));
+    };
+    reader.readAsDataURL(file);
+  });
+}
+
+function dataURLtoBlob(dataUrl) {
+  const arr = dataUrl.split(","); const mime = arr[0].match(/:(.*?);/)[1];
+  const bstr = atob(arr[1]); let n = bstr.length; const u8arr = new Uint8Array(n);
+  while (n--) u8arr[n] = bstr.charCodeAt(n);
+  return new Blob([u8arr], { type: mime });
+}
+
+async function uploadImageToSupabase(blob, fileName) {
+  const response = await fetch(`${SUPABASE_URL}/storage/v1/object/raw-product-images/${fileName}`, {
+    method: "POST",
+    headers: { "apikey": SUPABASE_KEY, "Authorization": `Bearer ${SUPABASE_KEY}`, "Content-Type": "image/jpeg", "x-upsert": "true" },
+    body: blob,
+  });
+  if (!response.ok) { const t = await response.text(); throw new Error(t); }
+  return `${SUPABASE_URL}/storage/v1/object/public/raw-product-images/${fileName}`;
 }
 
 /* ============================================================
-   SUBMIT
+   SUPABASE — INSERT DRAFT PRODUCT
+============================================================ */
+async function submitToSupabase(payload) {
+  const response = await fetch(`${SUPABASE_URL}/rest/v1/draft_products`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "apikey": SUPABASE_KEY,
+      "Authorization": `Bearer ${SUPABASE_KEY}`,
+      "Prefer": "return=representation",
+    },
+    body: JSON.stringify({
+      product_title:     payload.title,
+      category:          payload.category,
+      brand_name:        payload.brand || null,
+      mrp:               Number(payload.mrp),
+      images:            payload.images,
+      main_image_index:  payload.mainImageIndex,
+      status:            "draft",
+      source:            "manual_form",
+      raw_input:         payload,
+    }),
+  });
+  if (!response.ok) { const t = await response.text(); throw new Error(t || "Insert failed"); }
+  return response.json();
+}
+
+/* ============================================================
+   FORM SUBMIT
 ============================================================ */
 productForm.addEventListener("submit", async (e) => {
   e.preventDefault();
@@ -995,212 +901,80 @@ productForm.addEventListener("submit", async (e) => {
   }
 
   setLoadingState(true);
-const uploadPromises = state.images.map(async (img, i) => {
 
-  // STEP 1: compress image
-  const compressed = await compressImage(img.file);
+  /* Upload images */
+  const uploadPromises = state.images.map(async (img, i) => {
+    const compressed = await compressImage(img.file);
+    const blob       = dataURLtoBlob(compressed);
+    const fileName   = `${Date.now()}_${Math.random().toString(36).substring(2,8)}_${i}.jpg`;
+    const url        = await uploadImageToSupabase(blob, fileName);
+    return { url, isMain: i === 0 };
+  });
 
-  // STEP 2: convert to blob
-  const blob = dataURLtoBlob(compressed);
-
-  // STEP 3: generate better file name
-  const fileName = `${Date.now()}_${Math.random().toString(36).substring(2,8)}_${i}.jpg`;
-
-  // STEP 4: upload
-  const url = await uploadImageToSupabase(blob, fileName);
-
-  return {
-    url,
-    isMain: i === 0
-  };
-});
-
-// STEP 5: wait for ALL uploads together
-let uploadedImages = [];
-
-try {
-  uploadedImages = await Promise.all(uploadPromises);
-} catch (err) {
-  console.error(err);
-
-  showStatus(
-    "error",
-    "Image upload failed",
-    "Could not upload images."
-  );
-
-  setLoadingState(false);
-  return;
-}
-
-const payload = {
-  title: productTitle.value.trim(),
-  category: state.category,
-  brand: brandName.value.trim() || null,
-  mrp: parseFloat(mrpInput.value),
-  images: uploadedImages,
-  mainImageIndex: 0
-};
-   if (JSON.stringify(payload).length > 2_000_000) {
-  showStatus("error", "Images too large", "Please upload smaller images.");
-  setLoadingState(false);
-  return;
-}
-  console.log("Submitting:", payload);
-
-try {
-
-  // STEP 1: save into Supabase
-  const insertedRow = await submitToSupabase(payload);
-
-  console.log("Supabase insert success:", insertedRow);
-
-  // STEP 2: trigger n8n webhook separately
+  let uploadedImages = [];
   try {
-
-    const webhookResponse = await fetch(
-      "https://shelkesoham27.app.n8n.cloud/webhook/draft-product-process",
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-          draft_product_id: insertedRow[0].id
-        })
-      }
-    );
-
-    console.log("Webhook response:", webhookResponse.status);
-
-  } catch (webhookErr) {
-
-    console.error("Webhook failed:", webhookErr);
-
-  }
-
-  // STEP 3: success UI
-  showStatus(
-    "success",
-    "Product submitted successfully!",
-    "Product saved successfully."
-  );
-
-  resetForm();
-
-} catch (err) {
-
-  console.error(err);
-
-  showStatus(
-    "error",
-    "Submission failed",
-    err.message || "Something went wrong. Please try again."
-  );
-
-} finally {
-
-  setLoadingState(false);
-
-} 
-});
-
-/* ============================================================
-   SUPABASE API
-============================================================ */
-const SUPABASE_URL = "https://gkbwrjkyhaywquivadey.supabase.co";
-const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdrYndyamt5aGF5d3F1aXZhZGV5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzkwODM3MDYsImV4cCI6MjA5NDY1OTcwNn0.U0vpLnQjSaHoV2Tys8ULjjQ2UnmAl6-KSI_so2COcCE";
-
-async function submitToSupabase(payload) {
-  try {
-    const response = await fetch(`${SUPABASE_URL}/rest/v1/draft_products`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "apikey": SUPABASE_KEY,
-        "Authorization": `Bearer ${SUPABASE_KEY}`,
-        "Prefer": "return=representation"
-      },
-      body: JSON.stringify({
-        product_title: payload.title,
-        category: payload.category,
-        brand_name: payload.brand || null,
-        mrp: Number(payload.mrp),
-
-        images: payload.images,
-        main_image_index: payload.mainImageIndex,
-
-        status: "draft",
-        source: "manual_form",
-
-        raw_input: payload
-      })
-    });
-
-    if (!response.ok) {
-      const text = await response.text();
-      throw new Error(text || "Insert failed");
-    }
-
-    let data = null;
-    try {
-      data = await response.json();
-    } catch (e) {
-      data = null;
-    }
-
-    return data;
-
+    uploadedImages = await Promise.all(uploadPromises);
   } catch (err) {
-    console.error("Supabase error:", err);
-    throw err;
+    showStatus("error","Image upload failed","Could not upload images. Please try again.");
+    setLoadingState(false);
+    return;
   }
-}
 
-   
+  const payload = {
+    title:          productTitle.value.trim(),
+    category:       state.category,
+    brand:          brandName.value.trim() || null,
+    mrp:            parseFloat(mrpInput.value),
+    images:         uploadedImages,
+    mainImageIndex: 0,
+  };
+
+  try {
+    const insertedRow = await submitToSupabase(payload);
+    console.log("Supabase insert:", insertedRow);
+
+    /* Store id so preview can look up processed data */
+    if (insertedRow && insertedRow[0]) {
+      lastDraftProductId = insertedRow[0].id;
+    }
+
+    /* Trigger n8n webhook */
+    try {
+      await fetch("https://shelkesoham27.app.n8n.cloud/webhook/draft-product-process", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ draft_product_id: lastDraftProductId }),
+      });
+    } catch (wErr) { console.error("Webhook:", wErr); }
+
+    showStatus("success","Product submitted successfully!","Product saved. AI processing has started.");
+    viewOutputBtn.classList.add("visible"); /* show "View Output" button */
+    resetForm();
+  } catch (err) {
+    showStatus("error","Submission failed", err.message || "Something went wrong. Please try again.");
+  } finally {
+    setLoadingState(false);
+  }
+});
+
 /* ============================================================
-   FORM-FIELDS RESET AFTER SUCCESSFUL SUBMISSION
+   FORM RESET
 ============================================================ */
 function resetForm() {
-
-  // Reset native form fields
   productForm.reset();
-
-  // Reset category state
-  state.category = "";
-  selectedCategoryInp.value = "";
-
-  // Remove selected category UI
-  categoryGrid.querySelectorAll(".cat-card").forEach((card) => {
-    card.classList.remove("selected");
-    card.setAttribute("aria-checked", "false");
-  });
-
-  // Reset images array
+  state.category = ""; selectedCategoryInp.value = "";
+  categoryGrid.querySelectorAll(".cat-card").forEach(c => { c.classList.remove("selected"); c.setAttribute("aria-checked","false"); });
   state.images = [];
-
-  // Re-render previews
   renderPreviews();
-
-  // Clear all errors
-  clearError("imagesFieldWrapper", "imagesError");
-  clearError("titleFieldWrapper", "titleError");
-  clearError("categoryFieldWrapper", "categoryError");
-  clearError("mrpFieldWrapper", "mrpError");
-
-  // Scroll back to top
-  window.scrollTo({
-    top: 0,
-    behavior: "smooth"
+  ["imagesFieldWrapper","titleFieldWrapper","categoryFieldWrapper","mrpFieldWrapper"].forEach(w => {
+    const errId = { imagesFieldWrapper:"imagesError", titleFieldWrapper:"titleError", categoryFieldWrapper:"categoryError", mrpFieldWrapper:"mrpError" }[w];
+    clearError(w, errId);
   });
+  window.scrollTo({ top: 0, behavior: "smooth" });
 }
 
-
-
-
-   
 /* ============================================================
-   UI STATE HELPERS
+   UI HELPERS
 ============================================================ */
 function setLoadingState(loading) {
   submitBtn.disabled = loading;
@@ -1209,124 +983,297 @@ function setLoadingState(loading) {
     submitLabel.textContent = "Submitting…";
   } else {
     const sp = document.getElementById("submitIcon");
-    if (sp && sp.classList.contains("spinner")) {
+    if (sp && sp.classList.contains("spinner"))
       sp.outerHTML = `<svg id="submitIcon" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>`;
-    }
     submitLabel.textContent = "Submit Product";
   }
 }
-
 function showStatus(type, title, sub) {
   formStatus.className = `form-status visible ${type}`;
-  const icon = type === "success"
+  statusIcon.innerHTML = type === "success"
     ? `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>`
     : `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 8v4M12 16v.5"/></svg>`;
-  statusIcon.innerHTML = icon;
   statusText.innerHTML = `<strong>${escHtml(title)}</strong><span>${escHtml(sub)}</span>`;
-  formStatus.scrollIntoView({ behavior: "smooth", block: "nearest" });
+  formStatus.scrollIntoView({ behavior:"smooth", block:"nearest" });
 }
-
-function hideStatus() {
-  formStatus.className = "form-status";
-  statusIcon.innerHTML = "";
-  statusText.innerHTML = "";
-}
-
-
+function hideStatus() { formStatus.className = "form-status"; statusIcon.innerHTML = ""; statusText.innerHTML = ""; }
 
 /* ============================================================
-   COMPRESS IMAGES
+   PRODUCT PREVIEW — DATA FETCHING
 ============================================================ */
 
-async function compressImage(file) {
-  return new Promise((resolve) => {
-    const img = new Image();
-    const reader = new FileReader();
+/** Fetch latest processed product from processed_products_v2, optionally matching draft_id */
+async function fetchProcessedProduct() {
+  let url = `${SUPABASE_URL}/rest/v1/processed_products_v2?order=created_at.desc&limit=1`;
+  if (lastDraftProductId) {
+    url += `&draft_product_id=eq.${encodeURIComponent(lastDraftProductId)}`;
+  }
+  const res = await fetch(url, {
+    headers: { "apikey": SUPABASE_KEY, "Authorization": `Bearer ${SUPABASE_KEY}`, "Accept": "application/json" },
+  });
+  if (!res.ok) throw new Error("Failed to fetch processed product");
+  const data = await res.json();
+  return data && data.length > 0 ? data[0] : null;
+}
 
-    reader.onload = (e) => {
-      img.src = e.target.result;
-    };
+/** Fetch draft product by id to get images */
+async function fetchDraftProduct(draftId) {
+  const res = await fetch(`${SUPABASE_URL}/rest/v1/draft_products?id=eq.${encodeURIComponent(draftId)}&limit=1`, {
+    headers: { "apikey": SUPABASE_KEY, "Authorization": `Bearer ${SUPABASE_KEY}`, "Accept": "application/json" },
+  });
+  if (!res.ok) throw new Error("Failed to fetch draft product");
+  const data = await res.json();
+  return data && data.length > 0 ? data[0] : null;
+}
 
-    img.onload = () => {
-      const canvas = document.createElement("canvas");
-      const ctx = canvas.getContext("2d");
+function safeParseJSON(val) {
+  if (!val) return null;
+  if (typeof val === "object") return val;
+  try { return JSON.parse(val); } catch { return null; }
+}
 
-      const MAX_WIDTH = 600;
-      const scale = Math.min(MAX_WIDTH / img.width, 1);
+/* ============================================================
+   PRODUCT PREVIEW — RENDER
+============================================================ */
+async function loadProductPreview() {
+  const container = document.getElementById("previewContent");
+  container.innerHTML = `
+    <div class="preview-loading">
+      <div class="preview-loading-spinner"></div>
+      <div class="preview-loading-text">Fetching AI-generated output…</div>
+    </div>`;
 
-      canvas.width = img.width * scale;
-      canvas.height = img.height * scale;
+  try {
+    const processed = await fetchProcessedProduct();
 
-      ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+    if (!processed) {
+      container.innerHTML = `
+        <div class="preview-empty">
+          <div class="preview-empty-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16v.5"/></svg></div>
+          <div class="preview-empty-title">No output yet</div>
+          <div class="preview-empty-sub">The AI hasn't processed this product yet. Try again in a few moments.</div>
+        </div>`;
+      return;
+    }
 
-      resolve(canvas.toDataURL("image/jpeg", 0.6)); // compressed
-    };
+    /* Fetch draft product for images */
+    const draftId = processed.draft_product_id;
+    let draftImages = [];
+    if (draftId) {
+      const draft = await fetchDraftProduct(draftId);
+      if (draft) {
+        const imgs = safeParseJSON(draft.images);
+        if (Array.isArray(imgs)) draftImages = imgs;
+      }
+    }
 
-    reader.readAsDataURL(file);
+    /* Parse fields */
+    const specs       = safeParseJSON(processed.specifications)    || {};
+
+    const highlights = [
+  processed.key_highlight1,
+  processed.key_highlight2,
+  processed.key_highlight3,
+  processed.key_highlight4
+].filter(h => h && h.trim() !== "");
+
+
+    const keywords    = safeParseJSON(processed.search_keywords)   || [];
+    const category    = processed.category    || "";
+    const subcat1     = processed.subcategory1 || "";
+    const subcat2     = processed.subcategory2 || "";
+    const subcat3     = processed.subcategory3 || "";
+
+    /* Build breadcrumb parts */
+    const breadcrumbParts = [category, subcat1, subcat2, subcat3].filter(Boolean);
+
+    container.innerHTML = buildPreviewHTML({
+      breadcrumbParts,
+      title:       processed.main_product_title || processed_product.title || "—",
+      brand:       processed.brand_name    || processed.brand || "",
+      images:      draftImages,
+      mrp: processed.estimated_mrp || processed.mrp,
+      description: processed.product_description || "",
+      highlights:  Array.isArray(highlights) ? highlights.filter(Boolean) : [],
+      specs,
+      productType: processed.product_type || "",
+      keywords:    Array.isArray(keywords) ? keywords : [],
+    });
+
+    /* Attach accordion + image gallery behaviour */
+    initAccordions();
+    initImageGallery();
+
+  } catch (err) {
+    console.error(err);
+    container.innerHTML = `
+      <div class="preview-empty">
+        <div class="preview-empty-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></div>
+        <div class="preview-empty-title">Error loading preview</div>
+        <div class="preview-empty-sub">${escHtml(err.message)}</div>
+      </div>`;
+  }
+}
+
+function buildPreviewHTML({ breadcrumbParts, title, brand, images, mrp, description, highlights, specs, productType, keywords }) {
+  /* Breadcrumb */
+  const breadcrumb = breadcrumbParts.length
+    ? `<div class="pd-breadcrumb">${breadcrumbParts.map((p, i) =>
+        `<span>${escHtml(p)}</span>${i < breadcrumbParts.length - 1 ? `<span class="pd-breadcrumb-sep">›</span>` : ""}`
+      ).join("")}</div>`
+    : "";
+
+  /* Images — first image is main */
+  const imageUrls = images.map(img => {
+    if (typeof img === "string") return img;
+    if (img && img.url)     return img.url;
+    if (img && img.dataUrl) return img.dataUrl;
+    return "";
+  }).filter(Boolean);
+
+  const mainImgSrc   = imageUrls[0] || "";
+  const mainImgHTML  = mainImgSrc
+    ? `<img class="pd-main-img" id="pdMainImg" src="${escAttr(mainImgSrc)}" alt="Product image" loading="lazy"/>`
+    : `<div class="pd-main-img-placeholder"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 15l5-5 4 4 3-3 6 6"/><circle cx="8.5" cy="8.5" r="1.5"/></svg><span>No image</span></div>`;
+
+  const thumbsHTML = imageUrls.length > 1
+    ? `<div class="pd-thumbnails" id="pdThumbnails">${imageUrls.map((url, i) =>
+        `<div class="pd-thumb${i===0?" active":""}" data-src="${escAttr(url)}" data-index="${i}"><img src="${escAttr(url)}" alt="Thumb ${i+1}" loading="lazy"/></div>`
+      ).join("")}</div>`
+    : "";
+
+  /* Price */
+  const priceHTML = mrp != null
+    ? `<div class="pd-price-block"><span class="pd-price-label">MRP:&nbsp;</span><span class="pd-price-value">₹${Number(mrp).toLocaleString("en-IN")}</span></div>`
+    : "";
+
+  /* Highlights */
+  const hlItems = highlights.map(h => `<li><div class="pd-highlight-dot"></div><span>${escHtml(String(h))}</span></li>`).join("");
+  const hlHTML  = hlItems ? `<ul class="pd-highlights-list">${hlItems}</ul>` : `<p style="font-size:13px;color:var(--ink-4);">No highlights available.</p>`;
+
+  /* Specifications */
+  const specEntries = Object.entries(specs);
+  const specRows = specEntries.map(([k,v]) =>
+    `<tr><td>${escHtml(String(k))}</td><td>${escHtml(String(v))}</td></tr>`
+  ).join("");
+  const specHTML = specRows
+    ? `<table class="pd-spec-table">${specRows}</table>`
+    : `<p style="font-size:13px;color:var(--ink-4);">No specifications available.</p>`;
+
+  /* Keywords */
+  const kwHTML = keywords.length
+    ? `<div class="pd-keywords-wrap">${keywords.map(k => `<span class="pd-keyword-chip">${escHtml(String(k))}</span>`).join("")}</div>`
+    : `<span style="font-size:13px;color:var(--ink-4);">—</span>`;
+
+  return `
+    ${breadcrumb}
+    <div class="pd-title">${escHtml(title)}</div>
+    ${brand ? `<div class="pd-brand"><span class="pd-brand-label">Brand: </span><span class="pd-brand-value">${escHtml(brand)}</span></div>` : ""}
+
+    <div class="pd-images-section">
+      <div class="pd-main-img-wrap" id="pdMainImgWrap">${mainImgHTML}</div>
+      ${thumbsHTML}
+    </div>
+
+    ${priceHTML}
+
+    <div class="pd-accordion">
+
+      <div class="pd-accordion-item open" data-acc="desc">
+        <button class="pd-accordion-trigger" type="button" aria-expanded="true">
+          <span class="pd-accordion-trigger-label">Description</span>
+          <svg class="pd-accordion-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+        </button>
+        <div class="pd-accordion-body">
+          <p class="pd-description-text">${escHtml(description || "No description available.")}</p>
+        </div>
+      </div>
+
+      <div class="pd-accordion-item" data-acc="hl">
+        <button class="pd-accordion-trigger" type="button" aria-expanded="false">
+          <span class="pd-accordion-trigger-label">Key Highlights</span>
+          <svg class="pd-accordion-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+        </button>
+        <div class="pd-accordion-body">${hlHTML}</div>
+      </div>
+
+      <div class="pd-accordion-item" data-acc="spec">
+        <button class="pd-accordion-trigger" type="button" aria-expanded="false">
+          <span class="pd-accordion-trigger-label">Specifications</span>
+          <svg class="pd-accordion-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+        </button>
+        <div class="pd-accordion-body">${specHTML}</div>
+      </div>
+
+      <div class="pd-accordion-item" data-acc="other">
+        <button class="pd-accordion-trigger" type="button" aria-expanded="false">
+          <span class="pd-accordion-trigger-label">Other Details</span>
+          <svg class="pd-accordion-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+        </button>
+        <div class="pd-accordion-body">
+          ${productType ? `<div class="pd-other-detail"><span class="pd-other-detail-label">Product Type</span><span class="pd-other-detail-value">${escHtml(productType)}</span></div>` : ""}
+          <div class="pd-other-detail" style="flex-direction:column;gap:6px;">
+            <span class="pd-other-detail-label">Search Keywords</span>
+            ${kwHTML}
+          </div>
+        </div>
+      </div>
+
+    </div>`;
+}
+
+/* ============================================================
+   ACCORDION BEHAVIOUR
+============================================================ */
+function initAccordions() {
+  document.querySelectorAll(".pd-accordion-trigger").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const item    = btn.closest(".pd-accordion-item");
+      const isOpen  = item.classList.contains("open");
+      item.classList.toggle("open", !isOpen);
+      btn.setAttribute("aria-expanded", String(!isOpen));
+    });
   });
 }
 
-
-function dataURLtoBlob(dataUrl) {
-  const arr = dataUrl.split(',');
-  const mime = arr[0].match(/:(.*?);/)[1];
-  const bstr = atob(arr[1]);
-  let n = bstr.length;
-  const u8arr = new Uint8Array(n);
-
-  while (n--) {
-    u8arr[n] = bstr.charCodeAt(n);
-  }
-
-  return new Blob([u8arr], { type: mime });
-}
-
-
-
-   
 /* ============================================================
-   IMAGES-UPLOAD
+   IMAGE GALLERY BEHAVIOUR
 ============================================================ */
+function initImageGallery() {
+  const thumbs = document.querySelectorAll(".pd-thumb");
+  if (!thumbs.length) return;
 
-   async function uploadImageToSupabase(file, fileName) {
-  const response = await fetch(
-    `${SUPABASE_URL}/storage/v1/object/raw-product-images/${fileName}`,
-    {
-      method: "POST",
-     headers: {
-  "apikey": SUPABASE_KEY,
-  "Authorization": `Bearer ${SUPABASE_KEY}`,
-  "Content-Type": "image/jpeg",
-  "x-upsert": "true"
-},
-      body: file
-    }
-  );
+  thumbs.forEach((thumb) => {
+    thumb.addEventListener("click", () => {
+      const src     = thumb.dataset.src;
+      const mainImg = document.getElementById("pdMainImg");
+      if (!mainImg || !src) return;
 
-  if (!response.ok) {
-    const errorText = await response.text();
-console.error(errorText);
-throw new Error(errorText);
-  }
+      /* Fade transition */
+      mainImg.classList.add("fade");
+      setTimeout(() => {
+        mainImg.src = src;
+        mainImg.classList.remove("fade");
+      }, 200);
 
-  return `${SUPABASE_URL}/storage/v1/object/public/raw-product-images/${fileName}`;
+      /* Active state */
+      thumbs.forEach(t => t.classList.remove("active"));
+      thumb.classList.add("active");
+    });
+  });
 }
-   
+
 /* ============================================================
    UTILITIES
 ============================================================ */
-function escHtml(s) {
-  return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");
-}
-function escAttr(s) {
-  return String(s).replace(/"/g,"&quot;");
-}
+function escHtml(s) { return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;"); }
+function escAttr(s) { return String(s).replace(/"/g,"&quot;"); }
 
 /* ============================================================
    INIT
 ============================================================ */
 renderCategories();
-renderPreviews(); /* Show empty slots immediately */
+renderPreviews();
 </script>
 </body>
 </html>
